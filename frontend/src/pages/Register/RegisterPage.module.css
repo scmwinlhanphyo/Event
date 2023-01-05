@@ -1,5 +1,6 @@
 .container {
   width: 35% !important;
+  min-width: 450px;
   position: absolute;
   top: 50%;
   left: 50%;
