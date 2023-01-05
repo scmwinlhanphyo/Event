@@ -57,7 +57,7 @@ const LoginPage = () => {
           },
         }
       });
-      history.push('/home');
+      history.push('/admin/events');
     } else {
       alert('username or password is wrong');
     }
