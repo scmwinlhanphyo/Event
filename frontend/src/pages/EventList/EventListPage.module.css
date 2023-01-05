@@ -1,0 +1,45 @@
+.container {
+  margin-top: 25px !important;
+  margin-bottom: 100px !important;
+}
+.title {
+  color: #07b53b;
+  font-size: 25px;
+  font-weight: 1000;
+  margin-top: 20px;
+}
+.filterGroup {
+  display: flex;
+  margin-top: 20px;
+}
+.filterCol {
+  margin-bottom: 15px;
+}
+.eventTable {
+  margin-top: 20px;
+}
+.eventImg {
+  width: 100px;
+  height: 100px;
+}
+.eventName {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.rejectBtn {
+  margin-right: 5px;
+}
+.searchName, .fromDateInput, .toDateInput {
+  width: 180px !important;
+}
+.fromDate, .toDate {
+  display: flex;
+}
+.fromDate label {
+  width: 120px;
+  padding-top: 5px;
+}
+.toDate label {
+  width: 85px;
+  padding-top: 5px;
+}
