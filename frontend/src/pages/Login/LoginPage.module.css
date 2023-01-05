@@ -5,6 +5,7 @@
   position: absolute;
   transform: translate(-50%,-50%);
   width: 30% !important;
+  min-width: 450px;
   padding: 80px !important;
   border-radius: 30px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 20px 0px;
