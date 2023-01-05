@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {Button, Form, Container } from 'react-bootstrap';
+import {Button, Form, Container, FloatingLabel } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
 import styles from './LoginPage.module.css';
@@ -33,7 +33,8 @@ const LoginPage = () => {
     setValidated(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
       const token = 12345;
 
@@ -102,16 +103,17 @@ const LoginPage = () => {
 
   return (
     <Container className={styles.container}>
+      <h1 className={styles.loginTtl}>Event Login Form</h1>
       <Form validated={validated} noValidate onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
           <Form.Control
             required
             name="email"
             type="email"
-            placeholder="Enter email"
+            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
+            className={styles.formControl}
           />
           <Form.Control.Feedback type="invalid">
             Email is invalid
@@ -119,7 +121,6 @@ const LoginPage = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
           <Form.Control
             required
             name="password"
@@ -127,17 +128,20 @@ const LoginPage = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            className={styles.formControl}
           />
           <Form.Control.Feedback type="invalid">
-            Password is invalid
+            Password is required.
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
-        <Button variant="primary" disabled={disabledLoginBtn} type="submit">
-          Submit
-        </Button>
+        <div className="mb-3 d-flex justify-content-end">
+          <a href="#" className={styles.forgotPwd}>Forgot Password</a>
+        </div>
+        <div className="d-flex justify-content-around mt-5">
+          <Button disabled={disabledLoginBtn} type="submit" className={styles.loginBtn}>
+            Log In
+          </Button>
+        </div>
       </Form>
     </Container>
   )
