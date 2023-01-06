@@ -8,6 +8,6 @@ html, body, #root{
   border: 1px solid #07b53b;
   height: 45px !important;
   width: 100%;
-  position: fixed;
+  position: fixed !important;
   bottom: 0;
 }
