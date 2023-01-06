@@ -6,7 +6,7 @@ const Footer = () => {
     <>
       <Navbar className={styles.navBar} variant="dark">
         <Container>
-          <div>Seattle Consulting Myanmar</div>
+          <div className="d-flex w-100 justify-content-center">Seattle Consulting Myanmar</div>
         </Container>
       </Navbar>
     </>
