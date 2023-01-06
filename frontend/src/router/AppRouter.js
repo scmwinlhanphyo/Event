@@ -25,8 +25,8 @@ const AppRouter = withRouter(({ location }) => {
         <PublicRoute path="/admin/login" component={LoginPage} />
         <PrivateRoute path="/admin/home" component={HomePage} />
         <PrivateRoute path="/admin/events" component={EventListPage} />
-        <PublicRoute path="/user/create" component={CreatePage} />
-        <PrivateRoute path="/user/1/update" component={CreatePage} />
+        <PublicRoute path="/admin/user/create" component={CreatePage} />
+        <PrivateRoute path="/admin/user/1/update" component={CreatePage} />
 
         {/* Redirect all 404's to home */}
         <Redirect to='/admin/login' />
