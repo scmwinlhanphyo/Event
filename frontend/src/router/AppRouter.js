@@ -4,14 +4,12 @@ import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import LoginPage from "../pages/Login/LoginPage";
 import RegisterPage from "../pages/Register/RegisterPage";
-import HomePage from "../pages/Home/HomePage";
-import EventListPage from "../pages/EventList/EventListPage";
+import UserPage from "../pages/User/UserPage";
+import EventPage from "../pages/Event/EventPage";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 
 const AppRouter = withRouter(({ location }) => {
-
-  console.log('pathname', location.pathname);
 
   /**
    * make path for each component.
@@ -23,8 +21,8 @@ const AppRouter = withRouter(({ location }) => {
       }
       <Switch>
         <PublicRoute path="/admin/login" component={LoginPage} />
-        <PrivateRoute path="/admin/home" component={HomePage} />
-        <PrivateRoute path="/admin/events" component={EventListPage} />
+        <PrivateRoute path="/admin/users" component={UserPage} />
+        <PrivateRoute path="/admin/events" component={EventPage} />
         <PublicRoute path="/admin/register" component={RegisterPage} />
 
         {/* Redirect all 404's to home */}
