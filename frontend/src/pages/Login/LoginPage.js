@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import {Button, Form, Container, FloatingLabel } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
-import styles from './LoginPage.module.css';
+import styles from './LoginPage.module.scss';
 
 const LoginPage = () => {
   const [formData, setFormData] = React.useState({

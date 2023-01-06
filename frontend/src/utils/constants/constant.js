@@ -68,7 +68,7 @@ export const eventData = {
       approvedBy: null,
       img: '/events/img5.jpg',
       fromDate: new Date(),
-      toDate: new Date(),
+      toDate: new Date().setDate(new Date().getDate()+2),
       fromTime: '9:00 AM',
       toTime: '5:00 PM',
       address: 'MaharBandula Park',
@@ -80,6 +80,257 @@ export const eventData = {
     limit: 5,
     pageNumber: 1,
     total: 20,
-    totalPages: 10
+    totalPages: 4
   }
 };
+
+export const eventTableProperty = {
+  headers: ['No', 'Image', 'Event Name', 'Date', 'Time', 'Status', 'Approved by', 'Created At', 'Updated At', 'Actions'],
+  property: [
+    {
+      key: 'img',
+      type: 'image'
+    },
+    {
+      key: 'eventName',
+      type: 'title'
+    },
+    {
+      key: 'fromDate',
+      type: 'date'
+    },
+    {
+      key: 'fromTime',
+      type: 'time'
+    },
+    {
+      key: 'status',
+      type: 'label'
+    },
+    {
+      key: 'approvedBy',
+      type: 'label'
+    },
+    {
+      key: 'createdAt',
+      type: 'date'
+    },
+    {
+      key: 'updatedAt',
+      type: 'date'
+    },
+    {
+      type: 'buttons',
+      value: 'changedStatus'
+    }
+  ]
+};
+
+export const eventDialogProperty = {
+  title: 'Event Detail',
+  property: [
+    {
+      label: 'Event Name',
+      key: 'eventName',
+      type: 'label'
+    },
+    {
+      label: 'Description',
+      key: 'description',
+      type: 'label'
+    },
+    {
+      label: 'Date',
+      key: 'fromDate',
+      type: 'date'
+    },
+    {
+      label: 'Time',
+      key: 'fromTime',
+      type: 'time'
+    },
+    {
+      label: 'Status',
+      key: 'status',
+      type: 'label'
+    },
+    {
+      label: 'Approved by',
+      key: 'approvedBy',
+      type: 'label'
+    },
+    {
+      label: 'Created At',
+      key: 'createdAt',
+      type: 'date'
+    },
+    {
+      label: 'Updated At',
+      key: 'updatedAt',
+      type: 'date'
+    }
+  ]
+}
+
+export const userTableProperty = {
+  headers: ['No', 'Profile', 'Name', 'Role', 'Email', 'Date Of Birth', 'Address', 'Phone', 'Created At', 'Updated At', 'Actions'],
+  property: [
+    {
+      key: 'profile',
+      type: 'image'
+    },
+    {
+      key: 'name',
+      type: 'title'
+    },
+    {
+      key: 'role',
+      type: 'label'
+    },
+    {
+      key: 'email',
+      type: 'label'
+    },
+    {
+      key: 'dob',
+      type: 'date'
+    },
+    {
+      key: 'address',
+      type: 'label'
+    },
+    {
+      key: 'phone',
+      type: 'label'
+    },
+    {
+      key: 'createdAt',
+      type: 'date'
+    },
+    {
+      key: 'updatedAt',
+      type: 'date'
+    },
+    {
+      type: 'buttons',
+      value: 'changedData'
+    }
+  ]
+};
+
+export const userData = {
+  data: [
+    {
+      id: 1,
+      name: 'WLP',
+      role: 'Admin',
+      email: 'scm.winlhanphyo@gmail.com',
+      dob: new Date('1996-08-14'),
+      address: 'Ygn',
+      phone: '09123456789',
+      profile: '/profile/img1.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 2,
+      name: 'John',
+      role: 'User',
+      email: 'john@gmail.com',
+      dob: new Date('2000-08-19'),
+      address: 'Ygn',
+      phone: '09123456789',
+      profile: '/profile/img2.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 3,
+      name: 'Joe',
+      role: 'Admin',
+      email: 'joe@gmail.com',
+      dob: new Date('2001-08-20'),
+      address: 'Ygn',
+      phone: '09123456789',
+      profile: '/profile/img3.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 4,
+      name: 'Jasmine',
+      role: 'User',
+      email: 'jasmine@gmail.com',
+      dob: new Date('2001-10-22'),
+      address: 'Ygn',
+      phone: '09123456789',
+      profile: '/profile/img4.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: 5,
+      name: 'Katt',
+      role: 'Admin',
+      email: 'katt@gmail.com',
+      dob: new Date('2001-10-23'),
+      address: 'Ygn',
+      phone: '09123456789',
+      profile: '/profile/img5.jpg',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  ],
+  metadata: {
+    limit: 5,
+    pageNumber: 1,
+    total: 20,
+    totalPages: 4
+  }
+};
+
+export const userDialogProperty = {
+  title: 'User Detail',
+  property: [
+    {
+      label: 'Name',
+      key: 'name',
+      type: 'label'
+    },
+    {
+      label: 'Role',
+      key: 'role',
+      type: 'label'
+    },
+    {
+      label: 'Email',
+      key: 'email',
+      type: 'label'
+    },
+    {
+      label: 'Date Of Birth',
+      key: 'dob',
+      type: 'date'
+    },
+    {
+      label: 'Address',
+      key: 'address',
+      type: 'label'
+    },
+    {
+      label: 'Phone',
+      key: 'phone',
+      type: 'label'
+    },
+    {
+      label: 'Created At',
+      key: 'createdAt',
+      type: 'date'
+    },
+    {
+      label: 'Updated At',
+      key: 'updatedAt',
+      type: 'date'
+    }
+  ]
+}

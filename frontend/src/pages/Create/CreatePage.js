@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import styles from './CreatePage.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
+import styles from './CreatePage.module.scss';
 
 const CreatePage = () => {
   const history = useHistory();
