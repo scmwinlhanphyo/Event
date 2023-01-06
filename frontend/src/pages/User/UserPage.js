@@ -5,6 +5,7 @@ import { userData, userTableProperty, userDialogProperty } from '../../utils/con
 import EventDetailDialog from '../../components/EventDetailDialog/EventDetailDialog';
 import ListTable from '../../components/ListTable/ListTable';
 import styles from './UserPage.module.scss';
+import { useHistory } from 'react-router-dom';
 
 const UserPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
@@ -13,6 +14,7 @@ const UserPage = () => {
   const mounted = React.useRef(false);
   let nameInput = React.createRef();
   let emailInput = React.createRef();
+  let history = useHistory();
 
   const handleDialog = (data) => {
     const flag = !showDialog;
@@ -21,11 +23,11 @@ const UserPage = () => {
   }
 
   const updateDeleteUser = (id, status) => {
-    let preUserList = userList;
-    const index = preUserList.findIndex(event => event.id === id);
-    preUserList[index].status = status;
-    preUserList[index].approvedBy = status === 'approved' ? 'WLP' : null;
-    setUserList([...preUserList]);
+    if (status === 'edit') {
+      history.push('/admin/user/' + id + '/update');
+    } else {
+      alert('Are you sure you want to delete');
+    }
   }
 
   const searchEvent = () => {
@@ -61,7 +63,7 @@ const UserPage = () => {
               <Button variant="primary" onClick={searchEvent}>Search</Button>
             </Col>
             <Col className={styles.filterCol}>
-              <Button variant="primary">Create</Button>
+              <Button variant="primary" onClick={() => history.push('/admin/user/create')}>Create</Button>
             </Col>
           </Row>
         </Form>

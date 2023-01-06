@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import {Button, Form, Container, FloatingLabel } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
-import styles from './LoginPage.module.css';
+import styles from './LoginPage.module.scss';
 
 const LoginPage = () => {
   const [formData, setFormData] = React.useState({
@@ -102,48 +102,54 @@ const LoginPage = () => {
   }
 
   return (
-    <Container className={styles.container}>
-      <h1 className={styles.loginTtl}>Event Login Form</h1>
-      <Form validated={validated} noValidate onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Control
-            required
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className={styles.formControl}
-          />
-          <Form.Control.Feedback type="invalid">
-            Email is invalid
-          </Form.Control.Feedback>
-        </Form.Group>
+    <Fragment>
+      <video autoPlay loop muted className={styles.videoBg}>
+        <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
+      </video>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Control
-            required
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className={styles.formControl}
-          />
-          <Form.Control.Feedback type="invalid">
-            Password is required.
-          </Form.Control.Feedback>
-        </Form.Group>
-        <div className="mb-3 d-flex justify-content-end">
-          <a href="#" className={styles.forgotPwd}>Forgot Password</a>
-        </div>
-        <div className="d-flex justify-content-around mt-5">
-          <Button disabled={disabledLoginBtn} type="submit" className={styles.loginBtn}>
-            Log In
-          </Button>
-        </div>
-      </Form>
-    </Container>
+      <div className={styles.container}>
+        <h1 className={styles.loginTtl}>Event Login Form</h1>
+        <Form validated={validated} noValidate onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Control
+              required
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className={styles.formControl}
+            />
+            <Form.Control.Feedback type="invalid">
+              Email is invalid
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Control
+              required
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={styles.formControl}
+            />
+            <Form.Control.Feedback type="invalid">
+              Password is required.
+            </Form.Control.Feedback>
+          </Form.Group>
+          <div className="mb-3 d-flex justify-content-end">
+            <a href="#" className={styles.forgotPwd}>Forgot Password?</a>
+          </div>
+          <div className="d-flex justify-content-around mt-5">
+            <Button disabled={disabledLoginBtn} type="submit" className={styles.loginBtn}>
+              Log In
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </Fragment>
   )
 }
 

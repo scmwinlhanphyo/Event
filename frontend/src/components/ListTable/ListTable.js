@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
-import styles from './ListTable.module.css';
+import styles from './ListTable.module.scss';
 
 const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
   return (

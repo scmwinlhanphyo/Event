@@ -1,12 +1,15 @@
 import {Container, Navbar} from 'react-bootstrap';
+import { useHistory, useLocation } from 'react-router-dom';
 import styles from './Footer.module.scss';
 
 const Footer = () => {
+  const location = useLocation().pathname;
+
   return (
     <>
-      <Navbar className={styles.navBar} variant="dark">
+      <Navbar className={location.indexOf('/create') !== -1 || location.indexOf('/update') !== -1 ? styles.createNavBar : styles.navBar} variant="dark">
         <Container>
-          <div>Seattle Consulting Myanmar</div>
+          <div className="d-flex w-100 justify-content-center">Seattle Consulting Myanmar</div>
         </Container>
       </Navbar>
     </>
