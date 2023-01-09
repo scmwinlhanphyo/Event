@@ -1,23 +1,19 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import {Button, Form} from 'react-bootstrap';
 import { useDispatch } from "react-redux";
-import { LOGIN_SUCCESS } from "../../store/actions/types";
-import styles from './LoginPage.module.scss';
+import styles from './ForgetPassword.module.scss';
 
-const LoginPage = () => {
+const ForgetPassword = () => {
   const [formData, setFormData] = React.useState({
     email: '',
-    password: ''
   });
   const [disabledLoginBtn, setDisabledLoginBtn] = React.useState(true);
   const [errorForm, setErrorForm] = React.useState({
     email: '',
-    password: ''
   });
   const history = useHistory();
   const dispatch = useDispatch();
-
   let validation = (value, name)=>{
     if(name == 'email'){
       if(!value){
@@ -26,15 +22,7 @@ const LoginPage = () => {
         return 'Email Format is required';
       }
       return '';
-    }
-    if(name == 'password'){
-      if(!value){
-        return 'Password is required';
-      } else if(value.length > 10){
-        return 'Password is greater than 10';
-      }
-      return '';
-    }
+    } 
   }
 
   /**
@@ -54,7 +42,7 @@ const LoginPage = () => {
         ...preErrorForm
       });
     }
-    if(!error && formData.email && formData.password){
+    if(!error && formData.email){
       setDisabledLoginBtn(false);
     }else{
       setDisabledLoginBtn(true);
@@ -76,31 +64,10 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
-      const token = 12345;
-
-      /** store logged in user's info to local storage */
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          accessToken: token,
-          ...formData
-        })
-      );
-
-      /** store logged in user's info to App State */
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          user: {
-            accessToken: '12345',
-            ...formData
-          },
-        }
-      });
-      history.push('/admin/events');
+    if (formData.email === 'admin@gmail.com') {
+      history.push('/admin/PasswordChangeForm');
     } else {
-      alert('username or password is wrong');
+      alert('Email is wrong');
     }
 
     // axios.post("auth/login", formData)
@@ -149,7 +116,7 @@ const LoginPage = () => {
       </video>
 
       <div className={styles.container}>
-        <p className={styles.loginTtl}>Event Login Form</p>
+        <p className={styles.forgetPasswordTtl}>Forgot your password?</p>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Control
@@ -164,33 +131,16 @@ const LoginPage = () => {
               isValid={!errorForm.email}
               isInvalid={errorForm.email}
             />
-             {errorForm.email ? (
-                <span className='text-danger mt-4'>{errorForm.email}</span>) : ''}
+            {errorForm.email ? (
+            <span className='text-danger mt-4'>{errorForm.email}</span>) : ''}
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              required
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={styles.formControl}
-              isValid={!errorForm.password}
-              isInvalid={errorForm.password}
-            />
-             {errorForm.password ? (
-            <span className='text-danger mt-4'>{errorForm.password}</span>) : ''}
-          </Form.Group>
-          <div className="mb-3 d-flex justify-content-end">
-            <a href="/admin/forgetPassword" className={styles.forgotPwd}>Forgot Password?</a>
-          </div>
           <div className="d-flex justify-content-around mt-5">
-            <Button disabled={disabledLoginBtn} type="submit" className={styles.loginBtn}>
-              Log In
+            <Button disabled={disabledLoginBtn} type="submit" className={styles.forgetBtn}>
+              Submit
             </Button>
+          </div>
+          <div className="d-flex justify-content-around mt-3">
+            <a href="/admin/login" className={styles.backToLogin}>Back to Login</a>
           </div>
         </Form>
       </div>
@@ -198,4 +148,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage;
+export default ForgetPassword;
