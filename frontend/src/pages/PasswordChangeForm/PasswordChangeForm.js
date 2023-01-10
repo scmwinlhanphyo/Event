@@ -1,37 +1,48 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import {Button, Form} from 'react-bootstrap';
 import { useDispatch } from "react-redux";
-import { LOGIN_SUCCESS } from "../../store/actions/types";
-import styles from './LoginPage.module.scss';
+import { FORGET_PASSWORD_SUCCESS } from "../../store/actions/types";
+import styles from './PasswordChangeForm.module.scss';
 
-const LoginPage = () => {
+const PasswordChangeForm = () => {
   const [formData, setFormData] = React.useState({
-    email: '',
-    password: ''
+    current_password: '',
+    new_password: '',
+    comfirm_new_password: ''
+  });
+  const [errorForm, setErrorForm] = React.useState({
+    current_password: '',
+    new_password: '',
+    comfirm_new_password: '',
   });
   const [disabledLoginBtn, setDisabledLoginBtn] = React.useState(true);
-  const [errorForm, setErrorForm] = React.useState({
-    email: '',
-    password: ''
-  });
   const history = useHistory();
   const dispatch = useDispatch();
-
   let validation = (value, name)=>{
-    if(name == 'email'){
+    if(name == 'current_password'){
       if(!value){
-        return 'Email is required';
-      }else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)){
-        return 'Email Format is required';
+        return 'Current Password is required';
+      } else if(value.length > 10){
+        return 'Current Password is greater than 10';
       }
       return '';
     }
-    if(name == 'password'){
+    if(name == 'new_password'){
       if(!value){
-        return 'Password is required';
+        return 'New Password is required';
       } else if(value.length > 10){
-        return 'Password is greater than 10';
+        return 'New Password is greater than 10';
+      }
+      return '';
+    }
+    if(name == 'comfirm_new_password'){
+      if(!value){
+        return 'Comfirm Password is required';
+      } else if(value.length > 10){
+        return 'Comfirm Password is greater than 10';
+      } else if(value != formData.new_password){
+        return 'Comfirm Password not equal with New Password';
       }
       return '';
     }
@@ -54,7 +65,7 @@ const LoginPage = () => {
         ...preErrorForm
       });
     }
-    if(!error && formData.email && formData.password){
+    if(!error && formData.current_password && formData.new_password && formData.comfirm_new_password){
       setDisabledLoginBtn(false);
     }else{
       setDisabledLoginBtn(true);
@@ -76,7 +87,7 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
+    if (formData.current_password === 'password' && formData.new_password === 'password' && formData.comfirm_new_password === formData.new_password) {
       const token = 12345;
 
       /** store logged in user's info to local storage */
@@ -90,7 +101,7 @@ const LoginPage = () => {
 
       /** store logged in user's info to App State */
       dispatch({
-        type: LOGIN_SUCCESS,
+        type: FORGET_PASSWORD_SUCCESS,
         payload: {
           user: {
             accessToken: '12345',
@@ -100,7 +111,7 @@ const LoginPage = () => {
       });
       history.push('/admin/events');
     } else {
-      alert('username or password is wrong');
+      alert('Password Change is not successfully !');
     }
 
     // axios.post("auth/login", formData)
@@ -149,48 +160,63 @@ const LoginPage = () => {
       </video>
 
       <div className={styles.container}>
-        <p className={styles.loginTtl}>Event Login Form</p>
+        <p className={styles.passwordChangeFormTtl}>Change Password</p>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control
-              required
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={styles.formControl}
-              isValid={!errorForm.email}
-              isInvalid={errorForm.email}
-            />
-             {errorForm.email ? (
-                <span className='text-danger mt-4'>{errorForm.email}</span>) : ''}
-          </Form.Group>
-
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Control
               required
-              name="password"
+              name="current_password"
               type="password"
-              placeholder="Password"
-              value={formData.password}
+              placeholder="Current Password"
+              value={formData.current_password}
               onChange={handleChange}
               onBlur={handleBlur}
               className={styles.formControl}
-              isValid={!errorForm.password}
-              isInvalid={errorForm.password}
+              isValid={!errorForm.current_password}
+              isInvalid={errorForm.current_password}
             />
-             {errorForm.password ? (
-            <span className='text-danger mt-4'>{errorForm.password}</span>) : ''}
+              {errorForm.current_password ? (
+                <span className='text-danger mt-4'>{errorForm.current_password}</span>) : ''}
           </Form.Group>
-          <div className="mb-3 d-flex justify-content-end">
-            <a href="/admin/forgetPassword" className={styles.forgotPwd}>Forgot Password?</a>
-          </div>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Control
+              required
+              name="new_password"
+              type="password"
+              placeholder="New Password"
+              value={formData.new_password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={styles.formControl}
+              isValid={!errorForm.new_password}
+              isInvalid={errorForm.new_password}
+            />
+              {errorForm.new_password ? (
+                <span className='text-danger mt-4'>{errorForm.new_password}</span>) : ''}
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Control
+              required
+              name="comfirm_new_password"
+              type="password"
+              placeholder="Confirm New Password"
+              value={formData.comfirm_new_password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className={styles.formControl}
+              isValid={!errorForm.comfirm_new_password}
+              isInvalid={errorForm.comfirm_new_password}
+            />
+              {errorForm.comfirm_new_password ? (
+                <span className='text-danger mt-4'>{errorForm.comfirm_new_password}</span>) : ''}
+          </Form.Group>
           <div className="d-flex justify-content-around mt-5">
-            <Button disabled={disabledLoginBtn} type="submit" className={styles.loginBtn}>
-              Log In
+            <Button disabled={disabledLoginBtn} type="submit" className={styles.forgetBtn}>
+              Change
             </Button>
+          </div>
+          <div className="d-flex justify-content-around mt-3">
+            <a href="/admin/login" className={styles.backToLogin}>Back to Login</a>
           </div>
         </Form>
       </div>
@@ -198,4 +224,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage;
+export default PasswordChangeForm;
