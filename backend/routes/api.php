@@ -20,7 +20,7 @@ use App\Http\Controllers\User\UserController;
 //     return $request->user();
 // });
 
-Route::group(['prefix' => 'user'], function() {
+Route::group(['prefix' => 'user'], function () {
     Route::get('/list', [UserController::class, 'getAllUserList']);
     // Route::post('/create', [ProductController::class, 'create']);
     // Route::get('/update/{id}', [ProductController::class, 'getProductById']);
@@ -33,10 +33,12 @@ Route::group(['prefix' => 'user'], function() {
     // Route::delete('/delete/{id}', 'Admin\CategoryController@deleteCategory');
 });
 
-Route::group(['prefix' => 'event'], function() {
+Route::group(['prefix' => 'event'], function () {
     Route::get('/list', [EventController::class, 'getAllEventList']);
+    Route::get('/detail/{id}', [EventController::class, 'getEventById']);
+    Route::delete('/delete/{id}', [EventController::class, 'deleteEventById']);
+    Route::post('/create', [EventController::class, 'createEvent']);
     // Route::get('/', [EventController::class, 'getAllEvent']);
-    // Route::post('/create', [ProductController::class, 'create']);
-    // Route::get('/update/{id}', [ProductController::class, 'getProductById']);
+    Route::put('/update/{id}', [EventController::class, 'updateEvent']);
     // Route::post('/updated', [ProductController::class, 'updateProduct']);
 });

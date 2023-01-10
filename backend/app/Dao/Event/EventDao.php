@@ -31,4 +31,55 @@ class EventDao implements EventDaoInterface
       return $events;
     });
   }
+
+  /**
+   * Get Event By Id
+   *
+   * @param $id
+   * @return void
+   */
+  public function getEventById($id)
+  {
+    return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.id', $id)->first();
+  }
+
+  /**
+   * Delete Job
+   *
+   * @param $id
+   * @return Obj
+   */
+  public function deleteEvent($id)
+  {
+    return DB::transaction(function () use ($id) {
+      $response = ['error' => "Event does not exist."];
+      $event = Event::find($id);
+      if ($event) {
+        $event->delete();
+        $response = ['success' => "Event is deleted successfully"];
+      }
+      return $response;
+    });
+  }
+
+  /**
+   * Create event
+   * @param $eventData
+   * @return void
+   */
+  public function createEvent($eventData)
+  {
+    return Event::create($eventData);
+  }
+
+  /**
+   * Update Event
+   * @param $eventData
+   * @param $id
+   * @return void
+   */
+  public function updateEvent($eventData, $id)
+  {
+    return Event::where('id', $id)->update($eventData);
+  }
 }

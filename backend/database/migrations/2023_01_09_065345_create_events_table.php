@@ -22,6 +22,8 @@ class CreateEventsTable extends Migration
             $table->string('from_time');
             $table->string('to_time');
             $table->string('status');
+            $table->string('image');
+            $table->string('address');
             $table->string('approved_by_user_id')->references('id')->on('users');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
