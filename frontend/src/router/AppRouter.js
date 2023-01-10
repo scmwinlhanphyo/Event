@@ -8,6 +8,7 @@ import EventPage from "../pages/Event/EventPage";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import CreatePage from "../pages/Create/CreatePage";
+import ProfilePage from "../pages/Profile/ProfilePage";
 
 const AppRouter = withRouter(({ location }) => {
 
@@ -25,6 +26,7 @@ const AppRouter = withRouter(({ location }) => {
         <PrivateRoute path="/admin/events" component={EventPage} />
         <PublicRoute path="/admin/user/create" component={CreatePage} />
         <PrivateRoute path="/admin/user/:id/update" component={CreatePage} />
+        <PrivateRoute path="/admin/profile" component={ProfilePage} />
 
         {/* Redirect all 404's to home */}
         <Redirect to='/admin/login' />
