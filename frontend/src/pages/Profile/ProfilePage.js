@@ -1,8 +1,7 @@
-import React, { Fragment, useState } from "react";
-import {Container, Row, Col, Image, Button, Breadcrumb, Form } from 'react-bootstrap';
+import React, { useState } from "react";
+import {Container, Row, Col, Image, Button, Breadcrumb } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import styles from "./ProfilePage.module.scss";
-import { BsChevronDoubleRight } from "react-icons/bs";
 
 const ProfilePage = () => {
     const history = useHistory();
@@ -51,7 +50,6 @@ const ProfilePage = () => {
                 <Row className="d-flex justify-content-center" md={4}>
                     <Button className={styles.updateBtn} onClick={handleUpdate}>
                         Update Profile
-                        <BsChevronDoubleRight className={styles.nextIcon} />
                     </Button>
                 </Row>
             </Container>
