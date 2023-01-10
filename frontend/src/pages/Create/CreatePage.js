@@ -2,14 +2,14 @@ import React, { Fragment, useRef, useState } from "react";
 import { Breadcrumb, Button, Container, Form, InputGroup, Row, Col, Image } from "react-bootstrap";
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './CreatePage.module.scss';
-import moment from 'moment';
+import axios from "../../axios/index";
 
 const CreatePage = () => {
   const history = useHistory();
   const location = useLocation().pathname;
   const [createForm, setCreateForm] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
-  const [touched, setTouched] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
   const mounted = useRef(false);
 
   const [formData, setFormData] = React.useState({
@@ -17,7 +17,10 @@ const CreatePage = () => {
     'email': '',
     'password': '',
     'confirmPassword': '',
-    'phone': ''
+    'phone': '',
+    'role': '',
+    'address': '',
+    'dob': ''
   });
 
   React.useEffect(() => {
@@ -29,23 +32,30 @@ const CreatePage = () => {
     function checkURL() {
       if (location === '/admin/user/create') {
         setCreateForm(true);
+        setChangePassword(true);
       }
       else {
+        let id = history.location.state.data;
+        axios.get('/user/detail/' + id).then(response => {
+          if(response.status == 200) {
+            let responseData = response.data;
+            const data = {
+              'name' : responseData.name,
+              'email' : responseData.email,
+              'phone' : responseData.phone,
+              'address' : responseData.address,
+              'role' : responseData.role,
+              'dob' : responseData.dob,
+              'profile' : '',
+              'password': 'password',
+              'confirmPassword': 'password',
+            }
+            setFormData(data);
+          }
+        })
         setUpdateForm(true);
         setDisabledSubmitBtn(false);
         setValidated(true);
-
-        setFormData({
-          'name': 'userA',
-          'email': 'usera@gmail.com',
-          'address': 'ygn',
-          'role': 'admin',
-          'dob': '15-11-1998',
-          'password': 'usera@123',
-          'confirmPassword': 'usera@123',
-          'profile': '',
-          'phone': '09450000888'
-        });
       }
     }
   }, []);
@@ -114,9 +124,16 @@ const CreatePage = () => {
     else {
       errors.phone = '';
     }
-    if (errors.password || errors.confirmPassword || errors.phone) {
+
+    let emailPattern = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[\.][A-Za-z]{2,4}$");
+    if(preFormData.email && emailPattern.test(preFormData.email)) {
+      errors.email = '';
+    }
+
+    if(errors.email || errors.password || errors.confirmPassword || errors.phone) {
       return false;
-    } else {
+    }
+    else {
       return true;
     }
   }
@@ -124,7 +141,21 @@ const CreatePage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validated) {
-      history.push('/admin/users');
+      if(createForm) {
+        axios.post('/user/create', formData).then((response) => {
+          if(response.status ==  200) {
+            history.push('/admin/users');
+          }
+        });
+      }
+      else {
+        let id = history.location.state.data;
+        axios.put('/user/update/' + id, formData).then(response => {
+          if(response.status == 200) {
+            history.push('/admin/users');
+          }
+        })
+      }
     }
   };
 
@@ -133,11 +164,19 @@ const CreatePage = () => {
     const value = event.target.value;
     let preFormError = errors;
     if(!value) {
-      preFormError.name = name+' is required.';
+      preFormError[`${name}`] = name+' is required.';
     }
     else {
-      preFormError.name = '';
+      preFormError[`${name}`] = '';
     }
+
+    if(name === 'email') {
+      let emailPattern = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[\.][A-Za-z]{2,4}$");
+      if(value && !emailPattern.test(value)) {
+        preFormError[`${name}`] = "Invalid email format";
+      }
+    }
+
     setErrors({...preFormError});
   }
 
@@ -149,6 +188,12 @@ const CreatePage = () => {
       'confirmPassword': '',
       'phone': ''
     });
+  }
+
+  const handleChangePwd = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    value == '1' ? setChangePassword(true) : setChangePassword(false);
   }
 
   return (
@@ -175,7 +220,7 @@ const CreatePage = () => {
               isInvalid={errors.name}
               onBlur={handleBlur}
             />
-            <span className="invalid-feedback">
+            <span className="invalid-feedback px-2">
               {errors.name}
             </span>
           </Form.Group>
@@ -186,6 +231,7 @@ const CreatePage = () => {
               name="role"
               type="radio"
               label="Admin"
+              selected={formData.role == 'admin' ? true : false}
               onChange={handleChange}
             />
             <Form.Check 
@@ -193,6 +239,7 @@ const CreatePage = () => {
               name="role"
               type="radio"
               label="User"
+              selected={formData.role == 'user' ? true : false}
               onChange={handleChange}
             />
           </InputGroup>
@@ -205,9 +252,11 @@ const CreatePage = () => {
               value={formData.email}
               onChange={handleChange}
               className={styles.formControl}
+              isValid={!errors.email}
+              isInvalid={errors.email}
               onBlur={handleBlur}
             />
-            <span className="invalid-feedback">
+            <span className="invalid-feedback px-2">
               {errors.email}
             </span>
           </Form.Group>
@@ -245,36 +294,48 @@ const CreatePage = () => {
               />
             </Col>
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Control
-              required
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className={styles.formControl}
-              isInvalid={errors.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.password}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Control
-              required
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={styles.formControl}
-              isInvalid={errors.confirmPassword}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.confirmPassword}
-            </Form.Control.Feedback>
-          </Form.Group>
+          {updateForm && 
+            <Form.Group as={Row} className="mb-3">
+              <Col>
+                <Form.Label>Change Password?</Form.Label>
+              </Col>
+              <Col className="d-flex justify-content-around">
+                  <Form.Check type="radio" name="changePwd" label="Yes" value="1" onChange={handleChangePwd}></Form.Check>
+                  <Form.Check type="radio" name="changePwd" label="No" value="0" onChange={handleChangePwd}></Form.Check>
+              </Col>
+            </Form.Group>}
+          {changePassword &&
+            <Form.Group className="mb-3">
+              <Form.Control
+                required
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className={styles.formControl}
+                isInvalid={errors.password}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.password}
+              </Form.Control.Feedback>
+            </Form.Group>}
+            {changePassword &&
+            <Form.Group className="mb-3">
+              <Form.Control
+                required
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={styles.formControl}
+                isInvalid={errors.confirmPassword}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.confirmPassword}
+              </Form.Control.Feedback>
+            </Form.Group>}
           <Form.Group className="mb-3">
             <Form.Control
               required

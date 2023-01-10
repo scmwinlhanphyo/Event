@@ -7,7 +7,7 @@ const Footer = () => {
 
   return (
     <>
-      <Navbar className={location.indexOf('/create') !== -1 || location.indexOf('/update') !== -1 ? styles.createNavBar+ ' shadow' : styles.navBar+ ' shadow'} variant="dark">
+      <Navbar className={location.indexOf('/create') !== -1 || location.indexOf('/profile') !== -1 || location.indexOf('/update') !== -1 ? styles.createNavBar+ ' shadow' : styles.navBar+ ' shadow'} variant="dark">
         <Container>
           <div className="d-flex w-100 justify-content-center">Seattle Consulting Myanmar</div>
         </Container>

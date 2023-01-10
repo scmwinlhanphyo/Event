@@ -46,6 +46,17 @@ class UserService implements UserServiceInterface
   }
 
   /**
+   * get user by id.
+   * @param $id
+   * @return Object $userData
+   */
+  public function getUserById($id)
+  {
+    $user = $this->userDao->getUserById($id);
+    return $user;
+  }
+
+  /**
    * Create user
    * @param $userInfo
    * @return void
@@ -64,6 +75,35 @@ class UserService implements UserServiceInterface
       'created_at' => now(),
     ];
     return $this->userDao->createUser($userData);
+  }
+
+  /**
+   * Update user
+   * @param $request, $id
+   * @return Object $user
+   */
+  public function updateUser($userData, $id) 
+  {
+    $userData = [
+      'name' => $userData->name,
+      'email' => $userData->email,
+      'password' => $userData->password,
+      'role' => $userData->role,
+      'dob' => $userData->dob,
+      'address' => $userData->address,
+      'phone' => $userData->phone,
+      'profile' => $userData->profile,
+    ];
+    return $this->userDao->updateUser($userData, $id);
+  }
+
+  /**
+   * Delete user data.
+   * @param $id
+   * @return void
+   */
+  public function deleteUser($id) {
+    return $this->userDao->deleteUser($id);
   }
 
   /**

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Response;
 use Validator;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -44,29 +45,44 @@ class UserController extends Controller
    */
   public function createUser(Request $request)
   {
-    $validator = $this->validateUser($request);
-    if ($validator->fails()) {
-      return response()->json(400);
-    } else {
-      if ($request->profile) {
-        $img_name = $this->userInterface->moveImg($request->profile);
-        if (!$img_name) {
-          return response()->json(['error_msg' => 'File Upload Failed。'], 302);
-        }
-        $request->profile = $img_name;
-        $userInfo = $this->userInfo($request);
-        $user = $this->userInterface->createUser($userInfo);
-      } else {
-        return response()->json(['error_msg' => 'Image Size Too Large']);
-      }
-      return Response::json($userInfo, 200);
-    }
+    $this->userInterface->createUser($request);
+    return response()->json([
+      'message' => 'new user successfully'
+    ]);
+    // $validator = $this->validateUser($request);
+    // if ($validator->fails()) {
+    //   return response()->json(400);
+    // } else {
+    //   if ($request->profile) {
+    //     $img_name = $this->userInterface->moveImg($request->profile);
+    //     if (!$img_name) {
+    //       return response()->json(['error_msg' => 'File Upload Failed。'], 302);
+    //     }
+    //     $request->profile = $img_name;
+    //     $userInfo = $this->userInfo($request);
+    //     $user = $this->userInterface->createUser($userInfo);
+    //   } else {
+    //     return response()->json(['error_msg' => 'Image Size Too Large']);
+    //   }
+    //   return Response::json($userInfo, 200);
+    // }
   }
 
   public function getProfileData()
   {
     $user = $this->userInterface->getProfileData();
     return response()->json($user, 200);
+  }
+
+  /**
+   * Get user by id
+   * @param $id
+   * @return object
+   */
+  public function getUserById($id)
+  {
+    $user = $this->userInterface->getUserById($id);
+    return $user;
   }
 
   /**
@@ -101,5 +117,24 @@ class UserController extends Controller
     $userObj->phone = trim($request->phone);
     $userObj->profile = trim($request->profile);
     return $userObj;
+  }
+
+  /**
+   * update user data.
+   * @param $request, $id
+   * @return Object
+   */
+  public function updateUser(Request $request, int $id) {
+    $this->userInterface->updateUser($request, $id);
+    return response()->json([
+      'message' => 'updated'
+    ]);
+  }
+
+  public function deleteUser($id) {
+    $this->userInterface->deleteUser($id);
+    return response()->json([
+      'message' => 'deleted successfully'
+    ]);
   }
 }

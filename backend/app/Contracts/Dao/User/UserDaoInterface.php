@@ -21,8 +21,29 @@ interface UserDaoInterface
   public function getAllUserList();
 
   /**
+   * get user by id
+   * @param $id
+   * @return Object
+   */
+  public function getUserById($id);
+
+  /**
    * create user data.
    * @return Object $user User Object
    */
   public function createUser($userData);
+
+  /**
+   * update user data
+   * @param $request,$id
+   * @return Object $user
+   */
+  public function updateUser($userData, $id);
+
+  /**
+   * delete user data.
+   * @param $id
+   * @return void
+   */
+  public function deleteUser($id);
 }
