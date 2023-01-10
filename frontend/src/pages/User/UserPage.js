@@ -6,11 +6,12 @@ import EventDetailDialog from '../../components/EventDetailDialog/EventDetailDia
 import ListTable from '../../components/ListTable/ListTable';
 import styles from './UserPage.module.scss';
 import { useHistory } from 'react-router-dom';
+import axios from '../../axios/index';
 
 const UserPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [userDialogData, setUserDialogData] = React.useState({});
-  const [userList, setUserList] = React.useState(userData.data);
+  const [userList, setUserList] = React.useState([]);
   const mounted = React.useRef(false);
   let nameInput = React.createRef();
   let emailInput = React.createRef();
@@ -24,9 +25,11 @@ const UserPage = () => {
 
   const updateDeleteUser = (id, status) => {
     if (status === 'edit') {
-      history.push('/admin/user/' + id + '/update');
+      history.push('/admin/user/' + id + '/update', {data : id});
     } else {
-      alert('Are you sure you want to delete');
+      axios.delete('/user/delete/' + id).then(response => {
+        fetchUsers();
+      })
     }
   }
 
@@ -37,11 +40,19 @@ const UserPage = () => {
   React.useEffect(() => {
     if (!mounted.current) {
       console.log('mounted');
+      fetchUsers();
     }
     mounted.current = true;
 
     return () => {};
   }, []);
+
+  const fetchUsers = async () => {
+    await axios.get('/user/list').then((response) => {
+      const data = response.data.data;
+      setUserList(data);
+    })
+  }
 
   return (
     <Container className={styles.container}>

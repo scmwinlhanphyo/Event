@@ -27,10 +27,10 @@ Route::group(['prefix' => 'user'], function() {
     // Route::post('/updated', [ProductController::class, 'updateProduct']);
 
     Route::post('/create', [UserController::class, 'createUser']);
-    // Route::get('/detail/{id}', 'Admin\CategoryController@getCategoryById');
+    Route::get('/detail/{id}', [UserController::class, 'getUserById']);
     // Route::get('/update/{id}', 'Admin\CategoryController@getCategoryById');
-    // Route::post('/updated', 'Admin\CategoryController@updateCategory');
-    // Route::delete('/delete/{id}', 'Admin\CategoryController@deleteCategory');
+    Route::put('/update/{id}', [UserController::class, 'updateUser']);
+    Route::delete('/delete/{id}', [UserController::class, 'deleteUser']);
 });
 
 Route::group(['prefix' => 'event'], function() {

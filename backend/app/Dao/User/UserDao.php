@@ -47,13 +47,40 @@ class UserDao implements UserDaoInterface
   }
 
   /**
+   * Get user by id
+   * 
+   * @param $id
+   * @return Object
+   */
+  public function getUserById($id) 
+  {
+    return User::find($id);
+  }
+
+  /**
    * Create user
    *
    * @param $userData
-   * @return void
+   * @return Object
    */
   public function createUser($userData)
   {
     return User::create($userData);
+  }
+
+  /**
+   * Update user
+   * 
+   * @param $userData, $id
+   * @return object
+   */
+  public function updateUser($userData, $id) 
+  {
+    return User::find($id)->update($userData);
+  }
+
+  public function deleteUser($id) 
+  {
+    return User::find($id)->delete();
   }
 }

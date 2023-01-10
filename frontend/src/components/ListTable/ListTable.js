@@ -4,8 +4,9 @@ import moment from 'moment';
 import styles from './ListTable.module.scss';
 
 const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
+
   return (
-    <Table striped bordered hover className={styles.eventTable}>
+    <Table striped bordered hover className={styles.eventTable} responsive>
       <thead>
         <tr>
           {tableProperty.headers.map((header, index) => (
