@@ -22,6 +22,8 @@ class EventSeeder extends Seeder
               'to_time' => '05:00 PM',
               'status' => 'approved',
               'approved_by_user_id' => 1,
+              'image' => '/uploads/images/events/img1.jpg',
+              'address' => 'Ygn',
               'created_at' => new \DateTime(),
               'updated_at' => new \DateTime(),
             ],
@@ -34,11 +36,12 @@ class EventSeeder extends Seeder
                 'to_time' => '05:00 PM',
                 'status' => 'approved',
                 'approved_by_user_id' => 2,
+                'image' => '/uploads/images/events/img2.jpg',
+                'address' => 'Mdy',
                 'created_at' => new \DateTime(),
                 'updated_at' => new \DateTime(),
             ]
           ];
-
           Event::insert($events);
     }
 }
