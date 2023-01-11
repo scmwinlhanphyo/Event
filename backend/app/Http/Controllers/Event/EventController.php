@@ -36,6 +36,26 @@ class EventController extends Controller
   }
 
   /**
+   * Get Top Event
+   * @return Response
+   */
+  public function getTopEvent()
+  {
+    $event = $this->eventInterface->getTopEventList();
+    return response()->json($event, 200);
+  }
+
+  /**
+   * Get Previous Event
+   * @return Response
+   */
+  public function getPreviousEvent()
+  {
+    $event = $this->eventInterface->getPreviousEventList();
+    return response()->json($event, 200);
+  }
+
+  /**
    * Get Event By Id
    *
    * @param Integer $id
@@ -55,7 +75,6 @@ class EventController extends Controller
 
   /**
    * Create category
-   *
    * @param Request $request
    * @return void
    */
