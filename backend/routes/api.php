@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Event\EventController;
+use App\Http\Controllers\ForgotPassword\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
@@ -42,3 +43,7 @@ Route::group(['prefix' => 'event'], function () {
     Route::put('/update/{id}', [EventController::class, 'updateEvent']);
     // Route::post('/updated', [ProductController::class, 'updateProduct']);
 });
+
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');

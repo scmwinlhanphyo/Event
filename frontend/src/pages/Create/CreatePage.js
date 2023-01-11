@@ -3,24 +3,27 @@ import { Breadcrumb, Button, Container, Form, InputGroup, Row, Col, Image } from
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './CreatePage.module.scss';
 import axios from "../../axios/index";
+import {imageURL} from "../../utils/constants/constant";
 
 const CreatePage = () => {
   const history = useHistory();
   const location = useLocation().pathname;
   const [createForm, setCreateForm] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
+  const [profile, setProfile] = useState({});
   const [changePassword, setChangePassword] = useState(false);
   const mounted = useRef(false);
 
   const [formData, setFormData] = React.useState({
-    'name': '',
-    'email': '',
-    'password': '',
-    'confirmPassword': '',
-    'phone': '',
-    'role': '',
-    'address': '',
-    'dob': ''
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    profile: '',
+    role: '',
+    address: '',
+    dob: ''
   });
 
   React.useEffect(() => {
@@ -39,6 +42,12 @@ const CreatePage = () => {
         axios.get('/user/detail/' + id).then(response => {
           if(response.status == 200) {
             let responseData = response.data;
+            
+            if(responseData.profile) {
+              const url = imageURL + responseData.profile;
+              setPreview(url);
+            }
+
             const data = {
               'name' : responseData.name,
               'email' : responseData.email,
@@ -87,6 +96,7 @@ const CreatePage = () => {
 
     if(name == 'profile') {
       const file = event.target.files[0];
+      setProfile(file);
       handlePreview(file);
     }
 
@@ -138,10 +148,14 @@ const CreatePage = () => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (validated) {
       if(createForm) {
+        if(profile) {
+          const base64 = await convertToBase64(profile);
+          formData.profile = base64;
+        }
         axios.post('/user/create', formData).then((response) => {
           if(response.status ==  200) {
             history.push('/admin/users');
@@ -150,6 +164,10 @@ const CreatePage = () => {
       }
       else {
         let id = history.location.state.data;
+        if(profile) {
+          const base64 = await convertToBase64(profile);
+          formData.profile = base64;
+        }
         axios.put('/user/update/' + id, formData).then(response => {
           if(response.status == 200) {
             history.push('/admin/users');
@@ -158,6 +176,19 @@ const CreatePage = () => {
       }
     }
   };
+
+  const convertToBase64 = (profile) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(profile);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
 
   const handleBlur = (event) => {
     const name = event.target.name;
@@ -231,7 +262,8 @@ const CreatePage = () => {
               name="role"
               type="radio"
               label="Admin"
-              selected={formData.role == 'admin' ? true : false}
+              value="admin"
+              checked={formData.role == 'admin' ? true : false}
               onChange={handleChange}
             />
             <Form.Check 
@@ -239,7 +271,8 @@ const CreatePage = () => {
               name="role"
               type="radio"
               label="User"
-              selected={formData.role == 'user' ? true : false}
+              value="user"
+              checked={formData.role == 'user' ? true : false}
               onChange={handleChange}
             />
           </InputGroup>
