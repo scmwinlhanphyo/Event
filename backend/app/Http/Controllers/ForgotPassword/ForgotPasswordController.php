@@ -47,7 +47,7 @@ class ForgotPasswordController extends Controller
 
     $user = User::where('email', $request->email)->first();
 
-    Mail::send('email.forgetPassword', ['id' => $user->id], function($message) use($request){
+    Mail::send('email.forgetPassword', ['token' => $token], function($message) use($request){
         $message->to($request->email);
         $message->subject('Reset Password');
     });
@@ -78,8 +78,8 @@ class ForgotPasswordController extends Controller
 
     $updatePassword = DB::table('password_resets')
                         ->where([
-                          'email' => $request->email, 
-                          // 'token' => $request->token
+                          // 'email' => $request->email,
+                          'token' => $request->token
                         ])
                         ->first();
 
@@ -87,7 +87,7 @@ class ForgotPasswordController extends Controller
       return back()->withInput()->with('error', 'Invalid token!');
     }
 
-    $user = User::where('email', $request->email)
+    $user = User::where('id', $request->email)
                 ->update(['password' => Hash::make($request->new_password)]);
 
     DB::table('password_resets')->where(['email'=> $request->email])->delete();
