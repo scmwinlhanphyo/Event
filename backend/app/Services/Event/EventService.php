@@ -34,6 +34,26 @@ class EventService implements EventServiceInterface
   }
 
   /**
+   * To get Top Event List
+   * @return Object $event list.
+   */
+  public function getTopEventList()
+  {
+    $event = $this->eventDao->getTopEventList();
+    return $event;
+  }
+
+  /**
+   * To get Previous Event List
+   * @return Object $event list.
+   */
+  public function getPreviousEventList()
+  {
+    $event = $this->eventDao->getPreviousEventList();
+    return $event;
+  }
+
+  /**
    * get event by id.
    * @param Integer $id
    * @return Object $event Event Object

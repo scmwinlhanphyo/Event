@@ -16,8 +16,8 @@ class EventSeeder extends Seeder
             [
               'event_name' => 'BarCamp 2023',
               'description' => 'It is IT developer knowledge sharing',
-              'from_date' => '09/01/2023',
-              'to_date' => '09/01/2023',
+              'from_date' => '2023-01-09',
+              'to_date' => '2023-01-09',
               'from_time' => '09:00 AM',
               'to_time' => '05:00 PM',
               'status' => 'approved',
@@ -30,8 +30,8 @@ class EventSeeder extends Seeder
             [
                 'event_name' => 'Esport Event',
                 'description' => 'MLBB, Pubg, Dota match',
-                'from_date' => '09/01/2023',
-                'to_date' => '09/01/2023',
+                'from_date' => '2023-01-09',
+                'to_date' => '2023-01-09',
                 'from_time' => '09:00 AM',
                 'to_time' => '05:00 PM',
                 'status' => 'approved',

@@ -20,7 +20,7 @@ class EventDao implements EventDaoInterface
   {
     return DB::transaction(function () {
       if (request()->query('search')) {
-        $events = Event::where(
+        $events = Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where(
           "name",
           'LIKE',
           '%' . request()->query('search') . '%'
@@ -29,6 +29,28 @@ class EventDao implements EventDaoInterface
         $events = Event::paginate(config('constant.pagination_count'));
       }
       return $events;
+    });
+  }
+
+  /**
+   * Get Top Event
+   * @return Response
+   */
+  public function getTopEventList()
+  {
+    return DB::transaction(function () {
+      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.to_date', '>=', date('Y-m-d'))->paginate(config('constant.pagination_count'));
+    });
+  }
+
+  /**
+   * Get Previous Event
+   * @return Response
+   */
+  public function getPreviousEventList()
+  {
+    return DB::transaction(function () {
+      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.to_date', '<', date('Y-m-d'))->paginate(config('constant.pagination_count'));
     });
   }
 

@@ -36,10 +36,11 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['prefix' => 'event'], function () {
     Route::get('/list', [EventController::class, 'getAllEventList']);
+    Route::get('/top/list', [EventController::class, 'getTopEvent']);
+    Route::get('/previous/list', [EventController::class, 'getPreviousEvent']);
     Route::get('/detail/{id}', [EventController::class, 'getEventById']);
     Route::delete('/delete/{id}', [EventController::class, 'deleteEventById']);
     Route::post('/create', [EventController::class, 'createEvent']);
-    // Route::get('/', [EventController::class, 'getAllEvent']);
     Route::put('/update/{id}', [EventController::class, 'updateEvent']);
     // Route::post('/updated', [ProductController::class, 'updateProduct']);
 });

@@ -17,8 +17,8 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('event_name');
             $table->string('description')->nullable();
-            $table->string('from_date');
-            $table->string('to_date');
+            $table->date('from_date');
+            $table->date('to_date');
             $table->string('from_time');
             $table->string('to_time');
             $table->string('status');
