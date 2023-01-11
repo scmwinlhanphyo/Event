@@ -41,8 +41,7 @@ Route::group(['prefix' => 'event'], function () {
     Route::get('/detail/{id}', [EventController::class, 'getEventById']);
     Route::delete('/delete/{id}', [EventController::class, 'deleteEventById']);
     Route::post('/create', [EventController::class, 'createEvent']);
-    Route::put('/update/{id}', [EventController::class, 'updateEvent']);
-    // Route::post('/updated', [ProductController::class, 'updateProduct']);
+    Route::post('/update/{id}', [EventController::class, 'updateEvent']);
 });
 
 Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
