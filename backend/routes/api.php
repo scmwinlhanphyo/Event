@@ -5,6 +5,7 @@ use App\Http\Controllers\ForgotPassword\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Auth\AuthController;
 // use PharIo\Manifest\AuthorCollection;
 
 /*
@@ -27,6 +28,14 @@ use App\Http\Controllers\User\UserController;
 //     Route::post('/login', [AuthorCollection::class, 'login']);
 //     Route::post('/logout', [AuthorCollection::class, 'logout']);
 // });
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    info($request);
+    return $request->user();
+});
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+// Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/list', [UserController::class, 'getAllUserList']);

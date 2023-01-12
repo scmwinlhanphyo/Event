@@ -4,6 +4,8 @@ import {Button, Form} from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
 import styles from './LoginPage.module.scss';
+import axios from '../../axios/index';
+import LoadingOverlay from "react-loading-overlay-ts";
 
 const LoginPage = () => {
   const [formData, setFormData] = React.useState({
@@ -76,32 +78,63 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
-      const token = 12345;
+    axios.post('/login', formData).then((response) => {
+      console.log(response);
+      if(response.status === 200) {
+        const { data } = response;
+        const token = data.token;
+        const { user } = data;
+        console.log('token',response);
+        /** store logged in user's info to local storage */
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            accessToken: token,
+            ...user
+          })
+        );
+        /** store logged in user's info to App State */
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: {
+            user: {
+              accessToken: token,
+              ...formData
+            },
+          }
+        });
+        history.push('/admin/events');
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
 
-      /** store logged in user's info to local storage */
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          accessToken: token,
-          ...formData
-        })
-      );
+    // if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
+    //   const token = 12345;
 
-      /** store logged in user's info to App State */
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          user: {
-            accessToken: '12345',
-            ...formData
-          },
-        }
-      });
-      history.push('/admin/events');
-    } else {
-      alert('username or password is wrong');
-    }
+    //   /** store logged in user's info to local storage */
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       accessToken: token,
+    //       ...formData
+    //     })
+    //   );
+
+    //   /** store logged in user's info to App State */
+    //   dispatch({
+    //     type: LOGIN_SUCCESS,
+    //     payload: {
+    //       user: {
+    //         accessToken: '12345',
+    //         ...formData
+    //       },
+    //     }
+    //   });
+    //   history.push('/admin/events');
+    // } else {
+    //   alert('username or password is wrong');
+    // }
 
     // axios.post("auth/login", formData)
     // .then((res) => {
@@ -164,7 +197,7 @@ const LoginPage = () => {
               isValid={!errorForm.email}
               isInvalid={errorForm.email}
             />
-             {errorForm.email ? (
+            {errorForm.email ? (
                 <span className='text-danger mt-4'>{errorForm.email}</span>) : ''}
           </Form.Group>
 
@@ -181,7 +214,7 @@ const LoginPage = () => {
               isValid={!errorForm.password}
               isInvalid={errorForm.password}
             />
-             {errorForm.password ? (
+            {errorForm.password ? (
             <span className='text-danger mt-4'>{errorForm.password}</span>) : ''}
           </Form.Group>
           <div className="mb-3 d-flex justify-content-end">
@@ -194,6 +227,7 @@ const LoginPage = () => {
           </div>
         </Form>
       </div>
+
     </Fragment>
   )
 }

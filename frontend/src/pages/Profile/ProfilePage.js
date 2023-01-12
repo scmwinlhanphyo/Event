@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useRef, useState } from "react";
 import {Container, Row, Col, Image, Button, Breadcrumb } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import styles from "./ProfilePage.module.scss";
 
 const ProfilePage = () => {
     const history = useHistory();
+    const mounted = useRef(false);
+    const [profileData, setProfileData] = useState({});
+
+    React.useEffect(() => {
+        if (!mounted.current) {
+            setProfileData(JSON.parse(localStorage.getItem("user")));
+            console.log(JSON.parse(localStorage.getItem("user")));
+        }
+    }, []);
+
     const handleUpdate = () => {
-        history.push('/admin/user/1/update');
+        history.push('/admin/user/'+ profileData.id +'/update');
     }
-    const [profileData, setProfileData] = useState({
-        'name' : 'Admin A',
-        'email': 'adminA@gmail.com',
-        'address' : 'ygn',
-        'dob' : '15-11-1998',
-        'phone' : '09450000777',
-        'profile' : '/profile/img6.jpg'
-    });
     return(
         <div className={styles.wrapper}>
             <Breadcrumb className={styles.breadcrumb}>
