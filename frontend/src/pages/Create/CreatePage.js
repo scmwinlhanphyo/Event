@@ -4,6 +4,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './CreatePage.module.scss';
 import axios from "../../axios/index";
 import { imageURL } from "../../utils/constants/constant";
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const CreatePage = () => {
   const history = useHistory();
@@ -14,6 +15,7 @@ const CreatePage = () => {
   const [changePassword, setChangePassword] = useState(false);
   const mounted = useRef(false);
   const param = useParams();
+  const [loading, setLoading] = React.useState(false);
 
   const [formData, setFormData] = React.useState({
     name: '',
@@ -151,6 +153,8 @@ const CreatePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setDisabledSubmitBtn(true);
+    setLoading(true);
     if (validated) {
       const apiFormData = new FormData();
       apiFormData.append("name", formData.name);
@@ -167,6 +171,8 @@ const CreatePage = () => {
       }
       if (createForm) {
         axios.post('/user/create', apiFormData).then((response) => {
+          setDisabledSubmitBtn(false);
+          setLoading(false);
           if (response.status === 200) {
             history.push('/admin/users');
           }
@@ -174,6 +180,8 @@ const CreatePage = () => {
       } else {
         let id = history.location.state.data;
         axios.post('/user/update/' + id, apiFormData).then(response => {
+          setDisabledSubmitBtn(false);
+          setLoading(false);
           if (response.status === 200) {
             history.push('/admin/users');
           }
@@ -217,7 +225,8 @@ const CreatePage = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
+    <div className={loading ? styles.wrapper + ' ' + styles.backdrop : styles.wrapper}>
+      {loading && <LoadingSpinner text="Creating new user..." />}
       <Breadcrumb className={styles.breadcrumb}>
         <Breadcrumb.Item href='/admin/users'>Users</Breadcrumb.Item>
         {createForm && <Breadcrumb.Item href='#' active className={styles.active}>Create User</Breadcrumb.Item>}

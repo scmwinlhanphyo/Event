@@ -30,6 +30,9 @@
   border-radius: 10px;
   padding-right: 20px;
 }
+.backdrop {
+  pointer-events: none;
+}
 .registerTtl {
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   color: #07b53b !important;

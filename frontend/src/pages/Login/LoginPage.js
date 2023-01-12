@@ -80,10 +80,12 @@ const LoginPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true);
+    setDisabledLoginBtn(true);
     axios.post('/login', formData).then((response) => {
       console.log(response);
+      setLoading(false);
+      setDisabledLoginBtn(false);
       if(response.status === 200) {
-        setLoading(false);
         const { data } = response;
         const token = data.token;
         const { user } = data;
@@ -109,6 +111,9 @@ const LoginPage = () => {
         history.push('/admin/events');
       }
     }).catch((error) => {
+      setLoading(false);
+      setDisabledLoginBtn(false);
+      alert("Email or Password name is incorrect.");
       console.log(error);
     });
 
@@ -184,7 +189,7 @@ const LoginPage = () => {
         <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
       </video>
 
-      {loading && <LoadingSpinner />}
+      {loading && <LoadingSpinner text="Logging in..." />}
 
       <div className={loading ? styles.container + ' shadow ' + styles.backdrop : styles.container }>
         <p className={styles.loginTtl}>Event Login Form</p>

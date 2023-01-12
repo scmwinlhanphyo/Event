@@ -1,8 +1,9 @@
 .loadingContainer {
-    position: absolute;
+    position: fixed;
     padding: 40px;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.8);
+    filter: invert(1);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
