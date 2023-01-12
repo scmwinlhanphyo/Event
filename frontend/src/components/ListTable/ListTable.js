@@ -4,7 +4,7 @@ import moment from 'moment';
 import styles from './ListTable.module.scss';
 
 const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
-
+  
   return (
     <Table striped bordered hover className={styles.eventTable} responsive>
       <thead>
@@ -24,10 +24,10 @@ const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
                   {
                     (dist.type === 'image') ? <img alt='image' className={styles.eventImg} src={data[dist.key]} />
                       :
-                      (dist.type === 'date') ? (dist.key === 'fromDate') ? moment(data[dist.key]).format('DD/MM/YYYY') + '~' + moment(data.toDate).format('DD/MM/YYYY') : data?.[dist.key] ?
+                      (dist.type === 'date') ? (dist.key === 'from_date') ? moment(data[dist.key]).format('DD/MM/YYYY') + '~' + moment(data.toDate).format('DD/MM/YYYY') : data?.[dist.key] ?
                        moment(data[dist.key]).format('DD MMM YYYY') : ''
                         :
-                        (dist.type === 'time') ? data.fromTime + '~' + data.toTime
+                        (dist.type === 'time') ? data.from_time + '~' + data.to_time
                         :
                         (dist.type === 'title') ?
                           <a className={styles.eventName} onClick={() => handleDialog(data)}>{data[dist.key]}</a>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Breadcrumb, Button, Container, Form, InputGroup, Row, Col, Image } from "react-bootstrap";
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './CreatePage.module.scss';
 import axios from "../../axios/index";
 import { imageURL } from "../../utils/constants/constant";
@@ -13,6 +13,7 @@ const CreatePage = () => {
   const [profile, setProfile] = useState({});
   const [changePassword, setChangePassword] = useState(false);
   const mounted = useRef(false);
+  const param = useParams();
 
   const [formData, setFormData] = React.useState({
     name: '',
@@ -38,7 +39,7 @@ const CreatePage = () => {
         setChangePassword(true);
       }
       else {
-        let id = history.location.state.data;
+        let id = param['id'];
         axios.get('/user/detail/' + id).then(response => {
           if (response.status === 200) {
             let responseData = response.data;
