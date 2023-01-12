@@ -20,6 +20,9 @@
   -webkit-filter: blur(2px);
   object-fit: cover;
 }
+.backdrop {
+  filter: brightness(50%);
+}
 .formControl {
   color: #07b53b !important;
   font-size: 18px !important;

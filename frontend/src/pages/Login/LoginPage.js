@@ -5,9 +5,10 @@ import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
 import styles from './LoginPage.module.scss';
 import axios from '../../axios/index';
-import LoadingOverlay from "react-loading-overlay-ts";
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const LoginPage = () => {
+  const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
     email: '',
     password: ''
@@ -78,9 +79,11 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoading(true);
     axios.post('/login', formData).then((response) => {
       console.log(response);
       if(response.status === 200) {
+        setLoading(false);
         const { data } = response;
         const token = data.token;
         const { user } = data;
@@ -177,11 +180,13 @@ const LoginPage = () => {
 
   return (
     <Fragment>
-      <video autoPlay loop muted className={styles.videoBg}>
+      <video autoPlay loop muted className={loading ? styles.backdrop + ' shadow ' + styles.videoBg : styles.videoBg}>
         <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
       </video>
 
-      <div className={styles.container}>
+      {loading && <LoadingSpinner />}
+
+      <div className={loading ? styles.container + ' shadow ' + styles.backdrop : styles.container }>
         <p className={styles.loginTtl}>Event Login Form</p>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
