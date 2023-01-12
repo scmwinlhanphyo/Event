@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {Button, Form} from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { FORGET_PASSWORD_SUCCESS } from "../../store/actions/types";
 import styles from './PasswordChangeForm.module.scss';
+import axios from '../../axios/index';
 
 const PasswordChangeForm = () => {
   const [formData, setFormData] = React.useState({
@@ -18,6 +19,7 @@ const PasswordChangeForm = () => {
   });
   const [disabledLoginBtn, setDisabledLoginBtn] = React.useState(true);
   const history = useHistory();
+  const { token } = useParams();
   const dispatch = useDispatch();
   let validation = (value, name)=>{
     if(name == 'current_password'){
@@ -87,32 +89,39 @@ const PasswordChangeForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.current_password === 'password' && formData.new_password === 'password' && formData.comfirm_new_password === formData.new_password) {
-      const token = 12345;
+    axios.post(`/reset-password/${token}`, formData).then(response => {
+      if(response.status === 200) {
+        history.push('/login');
+      }
+    }).catch(error => {
+      alert(error.response.data);
+    });
+    // if (formData.new_password === 'password' && formData.comfirm_new_password === formData.new_password) {
+    //   const token = 12345;
 
       /** store logged in user's info to local storage */
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          accessToken: token,
-          ...formData
-        })
-      );
+      // localStorage.setItem(
+      //   "user",
+      //   JSON.stringify({
+      //     accessToken: token,
+      //     ...formData
+      //   })
+      // );
 
       /** store logged in user's info to App State */
-      dispatch({
-        type: FORGET_PASSWORD_SUCCESS,
-        payload: {
-          user: {
-            accessToken: '12345',
-            ...formData
-          },
-        }
-      });
-      history.push('/admin/events');
-    } else {
-      alert('Password Change is not successfully !');
-    }
+      // dispatch({
+      //   type: FORGET_PASSWORD_SUCCESS,
+      //   payload: {
+      //     user: {
+      //       accessToken: '12345',
+      //       ...formData
+      //     },
+      //   }
+      // });
+      // history.push('/admin/events');
+    // } else {
+    //   alert('Password Change is not successfully !');
+    // }
 
     // axios.post("auth/login", formData)
     // .then((res) => {

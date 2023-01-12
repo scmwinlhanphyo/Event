@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
-import {Button, Form} from 'react-bootstrap';
+import {Button, Form } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import styles from './ForgetPassword.module.scss';
+import axios from '../../axios/index';
 
 const ForgetPassword = () => {
   const [formData, setFormData] = React.useState({
@@ -64,8 +65,17 @@ const ForgetPassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@gmail.com') {
-      history.push('/admin/PasswordChangeForm');
+    if (formData) {
+      axios.post('/forget-password', formData).then(response => {
+        if(response.status === 200) {
+          alert('Reset Password Link was successfully sent to your email.');
+        }
+      }).catch(error => {
+        if(error.response.status === 422) {
+          alert('Email does not exist! Please try again.');
+          setFormData({email : ''});
+        }
+      })
     } else {
       alert('Email is wrong');
     }
