@@ -35,7 +35,14 @@ const UserPage = () => {
   }
 
   const searchEvent = () => {
-    console.log('input value', nameInput.current.value, emailInput.current.value);
+    const param = {};
+    if (nameInput.current.value) {
+      param.name = nameInput.current.value;
+    }
+    if (emailInput.current.value) {
+      param.email = emailInput.current.value;
+    }
+    fetchUsers(param);
   }
 
   React.useEffect(() => {
@@ -48,8 +55,8 @@ const UserPage = () => {
     return () => {};
   }, []);
 
-  const fetchUsers = async () => {
-    await axios.get('/user/list').then((response) => {
+  const fetchUsers = async (param={}) => {
+    await axios.get('/user/list', { params: param }).then((response) => {
       const data = response.data.data;
       data.forEach(user => {
         user.profile = imageURL + user.profile;

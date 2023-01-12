@@ -108,7 +108,7 @@ export const eventTableProperty = {
       type: 'label'
     },
     {
-      key: 'approved_by_user_id',
+      key: 'username',
       type: 'label'
     },
     {
@@ -150,13 +150,18 @@ export const eventDialogProperty = {
       type: 'time'
     },
     {
+      label: 'Address',
+      key: 'address',
+      type: 'address'
+    },
+    {
       label: 'Status',
       key: 'status',
       type: 'label'
     },
     {
       label: 'Approved by',
-      key: 'approved_by_user_id',
+      key: 'username',
       type: 'label'
     },
     {
