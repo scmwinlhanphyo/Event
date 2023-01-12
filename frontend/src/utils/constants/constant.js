@@ -92,15 +92,15 @@ export const eventTableProperty = {
       type: 'image'
     },
     {
-      key: 'eventName',
+      key: 'event_name',
       type: 'title'
     },
     {
-      key: 'fromDate',
+      key: 'from_date',
       type: 'date'
     },
     {
-      key: 'fromTime',
+      key: 'from_time',
       type: 'time'
     },
     {
@@ -108,15 +108,15 @@ export const eventTableProperty = {
       type: 'label'
     },
     {
-      key: 'approvedBy',
+      key: 'approved_by_user_id',
       type: 'label'
     },
     {
-      key: 'createdAt',
+      key: 'created_at',
       type: 'date'
     },
     {
-      key: 'updatedAt',
+      key: 'updated_at',
       type: 'date'
     },
     {
@@ -131,7 +131,7 @@ export const eventDialogProperty = {
   property: [
     {
       label: 'Event Name',
-      key: 'eventName',
+      key: 'event_name',
       type: 'label'
     },
     {
@@ -141,12 +141,12 @@ export const eventDialogProperty = {
     },
     {
       label: 'Date',
-      key: 'fromDate',
+      key: 'from_date',
       type: 'date'
     },
     {
       label: 'Time',
-      key: 'fromTime',
+      key: 'from_time',
       type: 'time'
     },
     {
@@ -156,17 +156,17 @@ export const eventDialogProperty = {
     },
     {
       label: 'Approved by',
-      key: 'approvedBy',
+      key: 'approved_by_user_id',
       type: 'label'
     },
     {
       label: 'Created At',
-      key: 'createdAt',
+      key: 'created_at',
       type: 'date'
     },
     {
       label: 'Updated At',
-      key: 'updatedAt',
+      key: 'updated_at',
       type: 'date'
     }
   ]

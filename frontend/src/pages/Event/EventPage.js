@@ -5,11 +5,12 @@ import { eventData, eventTableProperty, eventDialogProperty } from '../../utils/
 import EventDetailDialog from '../../components/EventDetailDialog/EventDetailDialog';
 import ListTable from '../../components/ListTable/ListTable';
 import styles from './EventPage.module.scss';
+import axios from '../../axios/index';
 
 const EventListPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [eventDialogData, setEventDialogData] = React.useState({});
-  const [eventList, setEventList] = React.useState(eventData.data);
+  const [eventList, setEventList] = React.useState([]);
   const mounted = React.useRef(false);
   let nameInput = React.createRef();
   let fromDateInput = React.createRef();
@@ -25,7 +26,14 @@ const EventListPage = () => {
     let preEventList = eventList;
     const index = preEventList.findIndex(event => event.id === id);
     preEventList[index].status =  status;
-    preEventList[index].approvedBy = status === 'approved' ? 'WLP' : null;
+    console.log(preEventList[index]);
+    preEventList[index].approved_by_user_id = status === 'approved' ? 'WLP' : null;
+    axios.post('/event/update/' + id, preEventList[index]).then((response) => {
+      if(response.status === 200) {
+        console.log('Event data was successfully updated!');
+      }
+    })
+
     setEventList([...preEventList]);
   }
 
@@ -36,11 +44,20 @@ const EventListPage = () => {
   React.useEffect(() => {
     if (!mounted.current) {
       console.log('mounted');
+      fetchEvents();
     }
     mounted.current = true;
 
     return () => {};
   }, []);
+
+  const fetchEvents = async () => {
+    await axios.get('/event/list').then(response => {
+      let data = response.data.data;
+      console.log(data);
+      setEventList(data);
+    })
+  }
 
   return (
     <Container className={styles.container}>

@@ -123,6 +123,6 @@ class EventService implements EventServiceInterface
       'approved_by_user_id' => $eventInfo->approved_by_user_id,
       'image' => $eventInfo->image
     ];
-    return $this->eventDao->updateevent($eventData, $id);
+    return $this->eventDao->updateEvent($eventData, $id);
   }
 }
