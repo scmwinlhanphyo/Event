@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
-import {Button, Form} from 'react-bootstrap';
+import {Button, Form } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import styles from './ForgetPassword.module.scss';
 import axios from "../../axios/index";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Redirect, withRouter } from "react-router-dom";
+import { Switch, Redirect, withRouter, matchPath } from "react-router-dom";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 import LoginPage from "../pages/Login/LoginPage";
@@ -13,14 +13,14 @@ import CreatePage from "../pages/Create/CreatePage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 
 const AppRouter = withRouter(({ location }) => {
-
+  
   /**
    * make path for each component.
    */
   return (
     <>
       {
-        (location.pathname !== '/admin/login' && location.pathname !== '/admin/forgetPassword' && location.pathname !== '/admin/PasswordChangeForm' && location.pathname !== '/user/create') && <Header showMenu={true} />
+        (location.pathname !== '/admin/login' && location.pathname !== '/admin/forgetPassword' && !matchPath(location.pathname, '/admin/PasswordChangeForm/:token')) && <Header showMenu={true} />
       }
       <Switch>
         <PublicRoute path="/admin/login" component={LoginPage} />
@@ -36,7 +36,7 @@ const AppRouter = withRouter(({ location }) => {
         <Redirect to='/admin/login' />
       </Switch>
       {
-        (location.pathname !== '/admin/login' && location.pathname !== '/admin/forgetPassword' && location.pathname !== '/admin/PasswordChangeForm' && location.pathname !== '/user/create') && <Footer />
+        (location.pathname !== '/admin/login' && location.pathname !== '/admin/forgetPassword' && !matchPath(location.pathname, '/admin/PasswordChangeForm/:token')) && <Footer />
       }
     </>
   )

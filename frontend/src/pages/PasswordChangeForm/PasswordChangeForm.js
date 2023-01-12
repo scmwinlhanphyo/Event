@@ -80,21 +80,23 @@ const PasswordChangeForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.post(`/reset-password/${token}`, formData).then(response => {
-      console.log(response);
+      if(response.status === 200) {
+        history.push('/login');
+      }
     }).catch(error => {
       alert(error.response.data);
-    })
+    });
     // if (formData.new_password === 'password' && formData.comfirm_new_password === formData.new_password) {
     //   const token = 12345;
 
-    //   /** store logged in user's info to local storage */
-    //   localStorage.setItem(
-    //     "user",
-    //     JSON.stringify({
-    //       accessToken: token,
-    //       ...formData
-    //     })
-    //   );
+      /** store logged in user's info to local storage */
+      // localStorage.setItem(
+      //   "user",
+      //   JSON.stringify({
+      //     accessToken: token,
+      //     ...formData
+      //   })
+      // );
 
     //   /** store logged in user's info to App State */
     //   dispatch({
