@@ -24,7 +24,8 @@ const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
                   {
                     (dist.type === 'image') ? <img alt='image' className={styles.eventImg} src={data[dist.key]} />
                       :
-                      (dist.type === 'date') ? (dist.key === 'fromDate') ? moment(data[dist.key]).format('DD/MM/YYYY') + '~' + moment(data.toDate).format('DD/MM/YYYY') : moment(data[dist.key]).format('DD MMM YYYY')
+                      (dist.type === 'date') ? (dist.key === 'fromDate') ? moment(data[dist.key]).format('DD/MM/YYYY') + '~' + moment(data.toDate).format('DD/MM/YYYY') : data?.[dist.key] ?
+                       moment(data[dist.key]).format('DD MMM YYYY') : ''
                         :
                         (dist.type === 'time') ? data.fromTime + '~' + data.toTime
                         :

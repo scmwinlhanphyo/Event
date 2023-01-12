@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         'email' => 'user@gmail.com',
         'password' => Hash::make("password"),
         'role' => 'user',
+        'profile' => 'storage/users/default.jpg',
         'created_at' => new \DateTime(),
         'updated_at' => new \DateTime(),
       ],
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
         'email' => 'admin@gmail.com',
         'password' => Hash::make("password"),
         'role' => 'admin',
+        'profile' => 'storage/users/default.jpg',
         'created_at' => new \DateTime(),
         'updated_at' => new \DateTime(),
       ]

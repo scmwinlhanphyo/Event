@@ -1,9 +1,9 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Breadcrumb, Button, Container, Form, InputGroup, Row, Col, Image } from "react-bootstrap";
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './CreatePage.module.scss';
 import axios from "../../axios/index";
-import {imageURL} from "../../utils/constants/constant";
+import { imageURL } from "../../utils/constants/constant";
 
 const CreatePage = () => {
   const history = useHistory();
@@ -40,22 +40,22 @@ const CreatePage = () => {
       else {
         let id = history.location.state.data;
         axios.get('/user/detail/' + id).then(response => {
-          if(response.status == 200) {
+          if (response.status === 200) {
             let responseData = response.data;
-            
-            if(responseData.profile) {
+
+            if (responseData.profile) {
               const url = imageURL + responseData.profile;
               setPreview(url);
             }
 
             const data = {
-              'name' : responseData.name,
-              'email' : responseData.email,
-              'phone' : responseData.phone,
-              'address' : responseData.address,
-              'role' : responseData.role,
-              'dob' : responseData.dob,
-              'profile' : '',
+              'name': responseData.name,
+              'email': responseData.email,
+              'phone': responseData.phone,
+              'address': responseData.address,
+              'role': responseData.role,
+              'dob': responseData.dob,
+              'profile': '',
               'password': 'password',
               'confirmPassword': 'password',
             }
@@ -94,7 +94,7 @@ const CreatePage = () => {
       setDisabledSubmitBtn(true);
     }
 
-    if(name == 'profile') {
+    if (name === 'profile') {
       const file = event.target.files[0];
       setProfile(file);
       handlePreview(file);
@@ -136,11 +136,11 @@ const CreatePage = () => {
     }
 
     let emailPattern = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[\.][A-Za-z]{2,4}$");
-    if(preFormData.email && emailPattern.test(preFormData.email)) {
+    if (preFormData.email && emailPattern.test(preFormData.email)) {
       errors.email = '';
     }
 
-    if(errors.email || errors.password || errors.confirmPassword || errors.phone) {
+    if (errors.email || errors.password || errors.confirmPassword || errors.phone) {
       return false;
     }
     else {
@@ -151,25 +151,29 @@ const CreatePage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validated) {
-      if(createForm) {
-        if(profile) {
-          const base64 = await convertToBase64(profile);
-          formData.profile = base64;
-        }
-        axios.post('/user/create', formData).then((response) => {
-          if(response.status ==  200) {
+      const apiFormData = new FormData();
+      apiFormData.append("name", formData.name);
+      apiFormData.append("email", formData.email);
+      if (changePassword) {
+        apiFormData.append("password", formData.password);
+      }
+      apiFormData.append("role", formData.role);
+      apiFormData.append("dob", formData.dob);
+      apiFormData.append("phone", formData.phone);
+      apiFormData.append("address", formData.address);
+      if (profile) {
+        apiFormData.append("profile", profile);
+      }
+      if (createForm) {
+        axios.post('/user/create', apiFormData).then((response) => {
+          if (response.status === 200) {
             history.push('/admin/users');
           }
         });
-      }
-      else {
+      } else {
         let id = history.location.state.data;
-        if(profile) {
-          const base64 = await convertToBase64(profile);
-          formData.profile = base64;
-        }
-        axios.put('/user/update/' + id, formData).then(response => {
-          if(response.status == 200) {
+        axios.post('/user/update/' + id, apiFormData).then(response => {
+          if (response.status === 200) {
             history.push('/admin/users');
           }
         })
@@ -177,38 +181,24 @@ const CreatePage = () => {
     }
   };
 
-  const convertToBase64 = (profile) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(profile);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
-
   const handleBlur = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     let preFormError = errors;
-    if(!value) {
-      preFormError[`${name}`] = name+' is required.';
-    }
-    else {
+    if (!value) {
+      preFormError[`${name}`] = name + ' is required.';
+    } else {
       preFormError[`${name}`] = '';
     }
 
-    if(name === 'email') {
+    if (name === 'email') {
       let emailPattern = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[\.][A-Za-z]{2,4}$");
-      if(value && !emailPattern.test(value)) {
+      if (value && !emailPattern.test(value)) {
         preFormError[`${name}`] = "Invalid email format";
       }
     }
 
-    setErrors({...preFormError});
+    setErrors({ ...preFormError });
   }
 
   const handleClear = () => {
@@ -222,9 +212,7 @@ const CreatePage = () => {
   }
 
   const handleChangePwd = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    value == '1' ? setChangePassword(true) : setChangePassword(false);
+    event.target.value === '1' ? setChangePassword(true) : setChangePassword(false);
   }
 
   return (
@@ -257,22 +245,22 @@ const CreatePage = () => {
           </Form.Group>
           <InputGroup className="mb-3 align-items-center justify-content-between">
             <InputGroup.Text>User Role</InputGroup.Text>
-            <Form.Check 
+            <Form.Check
               required
               name="role"
               type="radio"
               label="Admin"
               value="admin"
-              checked={formData.role == 'admin' ? true : false}
+              checked={formData.role === 'admin' ? true : false}
               onChange={handleChange}
             />
-            <Form.Check 
+            <Form.Check
               required
               name="role"
               type="radio"
               label="User"
               value="user"
-              checked={formData.role == 'user' ? true : false}
+              checked={formData.role === 'user' ? true : false}
               onChange={handleChange}
             />
           </InputGroup>
@@ -327,14 +315,14 @@ const CreatePage = () => {
               />
             </Col>
           </Form.Group>
-          {updateForm && 
+          {updateForm &&
             <Form.Group as={Row} className="mb-3">
               <Col>
                 <Form.Label>Change Password?</Form.Label>
               </Col>
               <Col className="d-flex justify-content-around">
-                  <Form.Check type="radio" name="changePwd" label="Yes" value="1" onChange={handleChangePwd}></Form.Check>
-                  <Form.Check type="radio" name="changePwd" label="No" value="0" onChange={handleChangePwd}></Form.Check>
+                <Form.Check type="radio" name="changePwd" label="Yes" value="1" onChange={handleChangePwd}></Form.Check>
+                <Form.Check type="radio" name="changePwd" label="No" value="0" onChange={handleChangePwd}></Form.Check>
               </Col>
             </Form.Group>}
           {changePassword &&
@@ -353,7 +341,7 @@ const CreatePage = () => {
                 {errors.password}
               </Form.Control.Feedback>
             </Form.Group>}
-            {changePassword &&
+          {changePassword &&
             <Form.Group className="mb-3">
               <Form.Control
                 required
