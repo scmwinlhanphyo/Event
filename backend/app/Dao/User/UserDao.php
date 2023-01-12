@@ -8,6 +8,8 @@ use App\Models\Operator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreUserPasswordRequest;
 use App\Contracts\Dao\User\UserDaoInterface;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Data accessing object for user
@@ -63,9 +65,35 @@ class UserDao implements UserDaoInterface
    * @param $userData
    * @return Object
    */
-  public function createUser($userData)
+  public function createUser($userInfo)
   {
-    return User::create($userData);
+    $userData = [
+      'name' => $userInfo->name,
+      'email' => $userInfo->email,
+      'password' => Hash::make($userInfo->password),
+      'role' => $userInfo->role,
+      'dob' => $userInfo->dob,
+      'address' => $userInfo->address,
+      'phone' => $userInfo->phone,
+      'created_at' => now(),
+    ];
+
+    $user = User::create($userData);
+    
+    if($userInfo->profile) {
+      $folder = 'users/';
+      $base64Image = explode(";base64,", $userInfo->profile);
+      $explodeImage = explode("image/", $base64Image[0]);
+      $ext = $explodeImage[1];
+      $image_base64 = base64_decode($base64Image[1]);
+      $file = $folder. $user->id . '.' . $ext;
+      $profile_name = $user->id . '.' . $ext; 
+      file_put_contents($file, $image_base64);
+      $user->profile = $profile_name;
+      $user->save();
+    }
+
+    return $user;
   }
 
   /**

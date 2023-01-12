@@ -8,12 +8,10 @@ import axios from '../../axios/index';
 
 const PasswordChangeForm = () => {
   const [formData, setFormData] = React.useState({
-    current_password: '',
     new_password: '',
     comfirm_new_password: ''
   });
   const [errorForm, setErrorForm] = React.useState({
-    current_password: '',
     new_password: '',
     comfirm_new_password: '',
   });
@@ -22,15 +20,7 @@ const PasswordChangeForm = () => {
   const { token } = useParams();
   const dispatch = useDispatch();
   let validation = (value, name)=>{
-    if(name == 'current_password'){
-      if(!value){
-        return 'Current Password is required';
-      } else if(value.length > 10){
-        return 'Current Password is greater than 10';
-      }
-      return '';
-    }
-    if(name == 'new_password'){
+    if(name === 'new_password'){
       if(!value){
         return 'New Password is required';
       } else if(value.length > 10){
@@ -38,12 +28,12 @@ const PasswordChangeForm = () => {
       }
       return '';
     }
-    if(name == 'comfirm_new_password'){
+    if(name === 'comfirm_new_password'){
       if(!value){
         return 'Comfirm Password is required';
       } else if(value.length > 10){
         return 'Comfirm Password is greater than 10';
-      } else if(value != formData.new_password){
+      } else if(value !== formData.new_password){
         return 'Comfirm Password not equal with New Password';
       }
       return '';
@@ -67,7 +57,7 @@ const PasswordChangeForm = () => {
         ...preErrorForm
       });
     }
-    if(!error && formData.current_password && formData.new_password && formData.comfirm_new_password){
+    if(!error && formData.new_password && formData.comfirm_new_password){
       setDisabledLoginBtn(false);
     }else{
       setDisabledLoginBtn(true);
@@ -108,17 +98,17 @@ const PasswordChangeForm = () => {
       //   })
       // );
 
-      /** store logged in user's info to App State */
-      // dispatch({
-      //   type: FORGET_PASSWORD_SUCCESS,
-      //   payload: {
-      //     user: {
-      //       accessToken: '12345',
-      //       ...formData
-      //     },
-      //   }
-      // });
-      // history.push('/admin/events');
+    //   /** store logged in user's info to App State */
+    //   dispatch({
+    //     type: FORGET_PASSWORD_SUCCESS,
+    //     payload: {
+    //       user: {
+    //         accessToken: '12345',
+    //         ...formData
+    //       },
+    //     }
+    //   });
+    //   history.push('/admin/events');
     // } else {
     //   alert('Password Change is not successfully !');
     // }
@@ -171,22 +161,6 @@ const PasswordChangeForm = () => {
       <div className={styles.container}>
         <p className={styles.passwordChangeFormTtl}>Change Password</p>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Control
-              required
-              name="current_password"
-              type="password"
-              placeholder="Current Password"
-              value={formData.current_password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={styles.formControl}
-              isValid={!errorForm.current_password}
-              isInvalid={errorForm.current_password}
-            />
-              {errorForm.current_password ? (
-                <span className='text-danger mt-4'>{errorForm.current_password}</span>) : ''}
-          </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Control
               required

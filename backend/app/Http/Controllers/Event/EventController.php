@@ -74,7 +74,7 @@ class EventController extends Controller
   }
 
   /**
-   * Create category
+   * Create Event
    * @param Request $request
    * @return void
    */
@@ -86,17 +86,6 @@ class EventController extends Controller
     } else {
       $eventInfo = $this->eventInfo($request);
       $event = $this->eventInterface->createEvent($eventInfo);
-      // if ($request->image) {
-      //   $img_name = $this->eventInterface->moveImg($request->image);
-      //   if (!$img_name) {
-      //     return response()->json(['error_msg' => 'File Upload Failed。'], 302);
-      //   }
-      //   $request->image = $img_name;
-      //   $eventInfo = $this->eventInfo($request);
-      //   $event = $this->eventInterface->createEvent($eventInfo);
-      // } else {
-      //   return response()->json(['error_msg' => 'Image Size Too Large']);
-      // }
       return Response::json($event, 200);
     }
   }
@@ -115,26 +104,6 @@ class EventController extends Controller
     } else {
       $eventInfo = $this->eventInfo($request);
       $event = $this->eventInterface->updateEvent($eventInfo, $request['id']);
-      // if ($request->image || $request->old_image) {
-      //   if ($request->image) {
-      //     $img_name = $this->eventInterface->moveImg($request->image);
-
-      //     if (!$img_name) {
-      //       return response()->json(['error_msg' => 'File Upload Failed。'], 302);
-      //     }
-
-      //     $request->image = $img_name;
-      //   } else {
-      //     $request->image = $request->old_image;
-      //   }
-      //   $eventInfo = $this->eventInfo($request);
-      //   $event = $this->eventInterface->updateEvent($eventInfo, $request['id']);
-      // } else {
-      //   return response()->json(['error_msg' => 'Image Size Too Large']);
-      // }
-
-      // $eventInfo = $this->eventInfo($request);
-      // $event = $this->eventInterface->updateEvent($eventInfo, $request['id']);
       return response()->json($event, 200);
     }
   }
@@ -147,6 +116,12 @@ class EventController extends Controller
    */
   private function eventInfo($request)
   {
+    if ($request->image) {
+      $file = $request->file('image');
+      $fileName = 'profile-' . time() . '.' . $file->getClientOriginalExtension();
+      $path = $file->storeAs('public/events', $fileName);
+    }
+
     $eventInfoObj = new \stdClass();
     $eventInfoObj->event_name  = trim($request->event_name);
     $eventInfoObj->description  = trim($request->description);
@@ -157,7 +132,7 @@ class EventController extends Controller
     $eventInfoObj->status = trim($request->status);
     $eventInfoObj->approved_by_user_id = trim($request->approved_by_user_id);
     $eventInfoObj->address = trim($request->address);
-    $eventInfoObj->image = trim($request->image);
+    $eventInfoObj->image = trim($path);
     return $eventInfoObj;
   }
 

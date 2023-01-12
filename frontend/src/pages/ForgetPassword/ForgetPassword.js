@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import {Button, Form } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import styles from './ForgetPassword.module.scss';
-import axios from '../../axios/index';
+import axios from "../../axios/index";
 
 const ForgetPassword = () => {
   const [formData, setFormData] = React.useState({
@@ -66,6 +66,7 @@ const ForgetPassword = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (formData) {
+      sessionStorage.setItem("email", formData.email);
       axios.post('/forget-password', formData).then(response => {
         if(response.status === 200) {
           alert('Reset Password Link was successfully sent to your email.');
