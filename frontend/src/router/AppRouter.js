@@ -25,7 +25,7 @@ const AppRouter = withRouter(({ location }) => {
       <Switch>
         <PublicRoute path="/admin/login" component={LoginPage} />
         <PublicRoute path="/admin/forgetPassword" component={ForgetPassword} />
-        <PublicRoute path="/admin/PasswordChangeForm" component={PasswordChangeForm} />
+        <PublicRoute path="/admin/PasswordChangeForm/:token" component={PasswordChangeForm} />
         <PrivateRoute path="/admin/users" component={UserPage} />
         <PrivateRoute path="/admin/events" component={EventPage} />
         <PublicRoute path="/admin/user/create" component={CreatePage} />

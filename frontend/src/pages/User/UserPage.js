@@ -7,6 +7,7 @@ import ListTable from '../../components/ListTable/ListTable';
 import styles from './UserPage.module.scss';
 import { useHistory } from 'react-router-dom';
 import axios from '../../axios/index';
+import { imageURL } from '../../utils/constants/constant';
 
 const UserPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
@@ -50,6 +51,9 @@ const UserPage = () => {
   const fetchUsers = async () => {
     await axios.get('/user/list').then((response) => {
       const data = response.data.data;
+      data.forEach(user => {
+        user.profile = imageURL + user.profile;
+      });
       setUserList(data);
     })
   }

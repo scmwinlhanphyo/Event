@@ -45,6 +45,7 @@ class UserController extends Controller
    */
   public function createUser(Request $request)
   {
+    Log::info($request);
     $this->userInterface->createUser($request);
     return response()->json([
       'message' => 'new user successfully'
