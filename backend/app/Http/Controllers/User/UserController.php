@@ -5,9 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Contracts\Services\User\UserServiceInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Response;
 use Validator;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -45,28 +45,16 @@ class UserController extends Controller
    */
   public function createUser(Request $request)
   {
-    Log::info($request);
-    $this->userInterface->createUser($request);
-    return response()->json([
-      'message' => 'new user successfully'
-    ]);
-    // $validator = $this->validateUser($request);
-    // if ($validator->fails()) {
-    //   return response()->json(400);
-    // } else {
-    //   if ($request->profile) {
-    //     $img_name = $this->userInterface->moveImg($request->profile);
-    //     if (!$img_name) {
-    //       return response()->json(['error_msg' => 'File Upload Failed。'], 302);
-    //     }
-    //     $request->profile = $img_name;
-    //     $userInfo = $this->userInfo($request);
-    //     $user = $this->userInterface->createUser($userInfo);
-    //   } else {
-    //     return response()->json(['error_msg' => 'Image Size Too Large']);
-    //   }
-    //   return Response::json($userInfo, 200);
-    // }
+    $validator = $this->validateCreateUser($request);
+    if ($validator->fails()) {
+      return response()->json(400);
+    } else {
+      $userInfo = $this->userInfo($request);
+      $this->userInterface->createUser($userInfo);
+      return response()->json([
+        'message' => 'new user successfully'
+      ]);
+    }
   }
 
   public function getProfileData()
@@ -91,12 +79,26 @@ class UserController extends Controller
    * @param Request $request
    * @return Obj
    */
-  private function validateUser(Request $request)
+  private function validateCreateUser(Request $request)
   {
     return $validator = Validator::make($request->all(), [
       'name' => 'required',
       'email' => 'required',
       'password' => 'required',
+      'role' => 'required'
+    ]);
+  }
+
+    /**
+   * Validate User.
+   * @param Request $request
+   * @return Obj
+   */
+  private function validateUpdateUser(Request $request)
+  {
+    return $validator = Validator::make($request->all(), [
+      'name' => 'required',
+      'email' => 'required',
       'role' => 'required'
     ]);
   }
@@ -116,7 +118,14 @@ class UserController extends Controller
     $userObj->dob = trim($request->dob);
     $userObj->address = trim($request->address);
     $userObj->phone = trim($request->phone);
-    $userObj->profile = trim($request->profile);
+    if ($request->file('profile')) {
+      $file = $request->file('profile');
+      $fileName = 'profile-' . time() . '.' . $file->getClientOriginalExtension();
+      $path = $file->storeAs('public/users', $fileName);
+      $userObj->profile = trim('storage/users/'.$fileName);
+    } else {
+      $userObj->profile = trim('storage/users/default.jpg');
+    }
     return $userObj;
   }
 
@@ -126,10 +135,16 @@ class UserController extends Controller
    * @return Object
    */
   public function updateUser(Request $request, int $id) {
-    $this->userInterface->updateUser($request, $id);
-    return response()->json([
-      'message' => 'updated'
-    ]);
+    $validator = $this->validateUpdateUser($request);
+    if ($validator->fails()) {
+      return response()->json(400);
+    } else {
+      $userInfo = $this->userInfo($request);
+      $this->userInterface->updateUser($userInfo, $id);
+      return response()->json([
+        'message' => 'User updated successfully'
+      ]);
+    }
   }
 
   public function deleteUser($id) {

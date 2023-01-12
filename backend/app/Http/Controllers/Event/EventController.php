@@ -116,12 +116,6 @@ class EventController extends Controller
    */
   private function eventInfo($request)
   {
-    if ($request->image) {
-      $file = $request->file('image');
-      $fileName = 'profile-' . time() . '.' . $file->getClientOriginalExtension();
-      $path = $file->storeAs('public/events', $fileName);
-    }
-
     $eventInfoObj = new \stdClass();
     $eventInfoObj->event_name  = trim($request->event_name);
     $eventInfoObj->description  = trim($request->description);
@@ -132,7 +126,12 @@ class EventController extends Controller
     $eventInfoObj->status = trim($request->status);
     $eventInfoObj->approved_by_user_id = trim($request->approved_by_user_id);
     $eventInfoObj->address = trim($request->address);
-    $eventInfoObj->image = trim($path);
+    if ($request->image) {
+      $file = $request->file('image');
+      $fileName = 'event-' . time() . '.' . $file->getClientOriginalExtension();
+      $path = $file->storeAs('public/events', $fileName);
+      $eventInfoObj->image = trim($path);
+    }
     return $eventInfoObj;
   }
 

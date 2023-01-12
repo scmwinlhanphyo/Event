@@ -22,7 +22,7 @@ const EventDetailDialog = ({show, handleClose, data, dialogProperty}) => {
               <Col>{dist.label}</Col>
               {(dist.type === 'date') ? 
               <Col>
-              {(dist.key === 'fromDate') ? moment(data?.[dist.key]).format('DD/MM/YYYY') + '~' + moment(data?.toDate).format('DD/MM/YYYY') : moment(data?.[dist?.key]).format('DD MMM YYYY')}
+              {(dist.key === 'fromDate') ? moment(data?.[dist.key]).format('DD/MM/YYYY') + '~' + moment(data?.toDate).format('DD/MM/YYYY') : data?.[dist.key] ? moment(data?.[dist?.key]).format('DD MMM YYYY') : ''}
               </Col>
               :
               (dist.type === 'time') ? <Col>{data?.fromTime + '~' + data?.toTime}</Col>

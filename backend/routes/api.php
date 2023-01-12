@@ -5,6 +5,7 @@ use App\Http\Controllers\ForgotPassword\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+// use PharIo\Manifest\AuthorCollection;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,12 @@ use App\Http\Controllers\User\UserController;
 //     return $request->user();
 // });
 
+// Route::group(['prefix' => 'user'], function () {
+//     Route::post('/register', [AuthorCollection::class, 'register']);
+//     Route::post('/login', [AuthorCollection::class, 'login']);
+//     Route::post('/logout', [AuthorCollection::class, 'logout']);
+// });
+
 Route::group(['prefix' => 'user'], function () {
     Route::get('/list', [UserController::class, 'getAllUserList']);
     // Route::post('/create', [ProductController::class, 'create']);
@@ -30,7 +37,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/create', [UserController::class, 'createUser']);
     Route::get('/detail/{id}', [UserController::class, 'getUserById']);
     // Route::get('/update/{id}', 'Admin\CategoryController@getCategoryById');
-    Route::put('/update/{id}', [UserController::class, 'updateUser']);
+    Route::post('/update/{id}', [UserController::class, 'updateUser']);
     Route::delete('/delete/{id}', [UserController::class, 'deleteUser']);
 });
 

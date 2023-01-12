@@ -204,11 +204,11 @@ export const userTableProperty = {
       type: 'label'
     },
     {
-      key: 'createdAt',
+      key: 'created_at',
       type: 'date'
     },
     {
-      key: 'updatedAt',
+      key: 'updated_at',
       type: 'date'
     },
     {
@@ -324,15 +324,15 @@ export const userDialogProperty = {
     },
     {
       label: 'Created At',
-      key: 'createdAt',
+      key: 'created_at',
       type: 'date'
     },
     {
       label: 'Updated At',
-      key: 'updatedAt',
+      key: 'updated_at',
       type: 'date'
     }
   ]
 }
 
-export const imageURL = "http://127.0.0.1:8000/users/";
+export const imageURL = "http://127.0.0.1:8000/";
