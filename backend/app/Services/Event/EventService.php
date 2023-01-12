@@ -121,8 +121,11 @@ class EventService implements EventServiceInterface
       'to_time' => $eventInfo->to_time,
       'status' => $eventInfo->status,
       'approved_by_user_id' => $eventInfo->approved_by_user_id,
-      'image' => $eventInfo->image
     ];
+    if (isset($eventInfo->image))
+    {
+      $eventData['profile'] = $eventInfo->image;
+    }
     return $this->eventDao->updateEvent($eventData, $id);
   }
 }

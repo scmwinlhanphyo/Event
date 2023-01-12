@@ -96,14 +96,14 @@ class EventController extends Controller
    * @param Request $request
    * @return Response
    */
-  public function updateEvent(Request $request)
+  public function updateEvent(Request $request,int $id)
   {
     $validator = $this->validateEvent($request);
     if ($validator->fails()) {
       return response()->json(400);
     } else {
       $eventInfo = $this->eventInfo($request);
-      $event = $this->eventInterface->updateEvent($eventInfo, $request['id']);
+      $event = $this->eventInterface->updateEvent($eventInfo, $id);
       return response()->json($event, 200);
     }
   }
@@ -126,7 +126,7 @@ class EventController extends Controller
     $eventInfoObj->status = trim($request->status);
     $eventInfoObj->approved_by_user_id = trim($request->approved_by_user_id);
     $eventInfoObj->address = trim($request->address);
-    if ($request->image) {
+    if ($request->file('image')) {
       $file = $request->file('image');
       $fileName = 'event-' . time() . '.' . $file->getClientOriginalExtension();
       $path = $file->storeAs('public/events', $fileName);
@@ -150,7 +150,6 @@ class EventController extends Controller
       'from_time' => 'required',
       'to_time' => 'required',
       'status' => 'required',
-      'approved_by_user_id' => 'required',
       'address' => 'required',
       'image' => 'required',
     ]);

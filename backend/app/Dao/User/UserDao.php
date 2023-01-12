@@ -35,16 +35,20 @@ class UserDao implements UserDaoInterface
   public function getAllUserList()
   {
     return DB::transaction(function () {
-      if (request()->query('search')) {
-        $users = User::where(
-          "name",
-          'LIKE',
-          '%' . request()->query('search') . '%'
-        )->paginate(config('constant.pagination_count'));
-      } else {
-        $users = User::paginate(config('constant.pagination_count'));
+      $condition = [];
+      if (request()->query('name')) {
+          array_push($condition, [
+            "name",
+            'LIKE',
+            '%' . request()->query('name') . '%']);
       }
-      return $users;
+      if (request()->query('email')) {
+        array_push($condition, [
+          "email",
+          'LIKE',
+          '%' . request()->query('email') . '%']);
+      }
+      return User::where($condition)->paginate(config('constant.pagination_count'));
     });
   }
 
