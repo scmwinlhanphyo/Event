@@ -49,7 +49,7 @@ class UserController extends Controller
     if ($validator->fails()) {
       return response()->json(400);
     } else {
-      $userInfo = $this->userInfo($request);
+      $userInfo = $this->userInfo($request, true);
       $this->userInterface->createUser($userInfo);
       return response()->json([
         'message' => 'new user successfully'
@@ -108,7 +108,7 @@ class UserController extends Controller
    * @param Request $request
    * @return void
    */
-  private function userInfo($request)
+  private function userInfo($request, $create_flg=false)
   {
     $userObj = new \stdClass();
     $userObj->name = trim($request->name);
@@ -123,7 +123,7 @@ class UserController extends Controller
       $fileName = 'profile-' . time() . '.' . $file->getClientOriginalExtension();
       $path = $file->storeAs('public/users', $fileName);
       $userObj->profile = trim('storage/users/'.$fileName);
-    } else {
+    } else if ($create_flg === true) {
       $userObj->profile = trim('storage/users/default.jpg');
     }
     return $userObj;

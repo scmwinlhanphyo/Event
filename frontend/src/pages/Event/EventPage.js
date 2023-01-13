@@ -26,7 +26,6 @@ const EventListPage = () => {
     let preEventList = eventList;
     const index = preEventList.findIndex(event => event.id === id);
     preEventList[index].status =  status;
-    console.log(preEventList[index]);
     preEventList[index].approved_by_user_id = status === 'approved' ? 1 : null;
     axios.post('/event/update/' + id, preEventList[index]).then((response) => {
       if(response.status === 200) {
@@ -34,11 +33,21 @@ const EventListPage = () => {
       }
     })
 
-    setEventList([...preEventList]);
+    searchEvent();
   }
 
   const searchEvent = () => {
-    console.log('input value', nameInput.current.value, fromDateInput.current.value, toDateInput.current.value);
+    const param = {};
+    if (nameInput.current.value) {
+      param.name = nameInput.current.value;
+    }
+    if (fromDateInput.current.value) {
+      param.name = fromDateInput.current.value;
+    }
+    if (toDateInput.current.value) {
+      param.name = toDateInput.current.value;
+    }
+    fetchEvents(param);
   }
 
   React.useEffect(() => {
@@ -51,10 +60,9 @@ const EventListPage = () => {
     return () => {};
   }, []);
 
-  const fetchEvents = async () => {
-    await axios.get('/event/list').then(response => {
+  const fetchEvents = async (param={}) => {
+    await axios.get('/event/list', { params: param }).then(response => {
       let data = response.data.data;
-      console.log(data);
       setEventList(data);
     })
   }

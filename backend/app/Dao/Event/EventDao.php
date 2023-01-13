@@ -19,16 +19,26 @@ class EventDao implements EventDaoInterface
   public function getAllEventList()
   {
     return DB::transaction(function () {
-      if (request()->query('search')) {
-        $events = Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where(
+      $condition = [];
+      if (request()->query('name')) {
+        array_push($condition, [
           "name",
           'LIKE',
-          '%' . request()->query('search') . '%'
-        )->paginate(config('constant.pagination_count'));
-      } else {
-        $events = Event::paginate(config('constant.pagination_count'));
+          '%' . request()->query('name') . '%']);
       }
-      return $events;
+      if (request()->query('from_date')) {
+        array_push($condition, [
+          "from_date",
+          '=',
+          request()->query('from_date')]);
+      }
+      if (request()->query('to_date')) {
+        array_push($condition, [
+          "to_date",
+          '=',
+          request()->query('to_date')]);
+      }
+      return Event::select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address as user_address', 'users.phone', 'users.profile')->leftJoin('users', 'users.id', '=', 'events.approved_by_user_id')->paginate(config('constant.pagination_count'));
     });
   }
 
@@ -50,7 +60,7 @@ class EventDao implements EventDaoInterface
   public function getPreviousEventList()
   {
     return DB::transaction(function () {
-      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.to_date', '<', date('Y-m-d'))->paginate(config('constant.pagination_count'));
+      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address as user_address', 'users.phone', 'users.profile')->where('events.to_date', '<', date('Y-m-d'))->paginate(config('constant.pagination_count'));
     });
   }
 
