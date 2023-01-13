@@ -176,15 +176,21 @@ const CreatePage = () => {
           if (response.status === 200) {
             history.push('/admin/users');
           }
+        }).catch(error => {
+          setLoading(false);
+          setDisabledSubmitBtn(false);
         });
       } else {
-        let id = history.location.state.data;
+        let id = param['id'];
         axios.post('/user/update/' + id, apiFormData).then(response => {
           setDisabledSubmitBtn(false);
           setLoading(false);
           if (response.status === 200) {
             history.push('/admin/users');
           }
+        }).catch(error => {
+          setLoading(false);
+          setDisabledSubmitBtn(false);
         })
       }
     }
@@ -226,7 +232,8 @@ const CreatePage = () => {
 
   return (
     <div className={loading ? styles.wrapper + ' ' + styles.backdrop : styles.wrapper}>
-      {loading && <LoadingSpinner text="Creating new user..." />}
+      {loading && createForm && <LoadingSpinner text="Creating new user..." />}
+      {loading && updateForm && <LoadingSpinner text="Updating profile..." />}
       <Breadcrumb className={styles.breadcrumb}>
         <Breadcrumb.Item href='/admin/users'>Users</Breadcrumb.Item>
         {createForm && <Breadcrumb.Item href='#' active className={styles.active}>Create User</Breadcrumb.Item>}
