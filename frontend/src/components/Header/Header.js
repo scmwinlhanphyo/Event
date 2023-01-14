@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Nav, Navbar, Image, NavDropdown} from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
+import { imageURL } from '../../utils/constants/constant';
 import styles from './Header.module.scss';
 import axios from '../../axios/index';
 
@@ -32,7 +33,7 @@ const Header = () => {
             </Nav>
             <Nav className="justify-content-end align-items-center">
               <Nav.Link as={Link} to={`/admin/${currentUser.id}/profile`}>
-                <Image src={currentUser.profile} roundedCircle className={styles.profileImg}></Image>
+                <Image src={imageURL + currentUser.profile} roundedCircle className={styles.profileImg}></Image>
               </Nav.Link>
               <NavDropdown title={currentUser.name}>
                 <NavDropdown.Item as={Link} onClick={handleLogout}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import EventPagination from '../../components/EventPagination/EventPagination';
-import { eventData, eventTableProperty, eventDialogProperty } from '../../utils/constants/constant';
+import { eventData, eventTableProperty, eventDialogProperty, paginationLimit } from '../../utils/constants/constant';
 import EventDetailDialog from '../../components/EventDetailDialog/EventDetailDialog';
 import ListTable from '../../components/ListTable/ListTable';
 import styles from './EventPage.module.scss';
@@ -11,6 +11,11 @@ const EventListPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [eventDialogData, setEventDialogData] = React.useState({});
   const [eventList, setEventList] = React.useState([]);
+  const [paginationData, setPaginationData] = React.useState({
+    from: 1,
+    last_page: 1,
+    per_page: 1
+  })
   const mounted = React.useRef(false);
   let nameInput = React.createRef();
   let fromDateInput = React.createRef();
@@ -42,10 +47,10 @@ const EventListPage = () => {
       param.name = nameInput.current.value;
     }
     if (fromDateInput.current.value) {
-      param.name = fromDateInput.current.value;
+      param.from_date = fromDateInput.current.value;
     }
     if (toDateInput.current.value) {
-      param.name = toDateInput.current.value;
+      param.to_date = toDateInput.current.value;
     }
     fetchEvents(param);
   }
@@ -60,10 +65,20 @@ const EventListPage = () => {
     return () => {};
   }, []);
 
-  const fetchEvents = async (param={}) => {
+  const fetchEvents = async (param={},page=1) => {
+    param = {
+      ...param,
+      limit: paginationLimit,
+      page
+    };
     await axios.get('/event/list', { params: param }).then(response => {
       let data = response.data.data;
       setEventList(data);
+      setPaginationData({
+        from: response.data.from,
+        last_page: response.data.last_page,
+        per_page: response.data.per_page
+      });
     })
   }
 
@@ -104,7 +119,8 @@ const EventListPage = () => {
         handleDialog={handleDialog}
       />
       <EventPagination
-        metadata={eventData.metadata}
+        metadata={paginationData}
+        fetchData={fetchEvents}
       />
       <EventDetailDialog
         show={showDialog}

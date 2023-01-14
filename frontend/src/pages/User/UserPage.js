@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import EventPagination from '../../components/EventPagination/EventPagination';
-import { userData, userTableProperty, userDialogProperty } from '../../utils/constants/constant';
+import { userData, userTableProperty, userDialogProperty, paginationLimit } from '../../utils/constants/constant';
 import EventDetailDialog from '../../components/EventDetailDialog/EventDetailDialog';
 import ListTable from '../../components/ListTable/ListTable';
 import styles from './UserPage.module.scss';
@@ -13,6 +13,11 @@ const UserPage = () => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [userDialogData, setUserDialogData] = React.useState({});
   const [userList, setUserList] = React.useState([]);
+  const [paginationData, setPaginationData] = React.useState({
+    from: 1,
+    last_page: 1,
+    per_page: 1
+  })
   const mounted = React.useRef(false);
   let nameInput = React.createRef();
   let emailInput = React.createRef();
@@ -55,13 +60,23 @@ const UserPage = () => {
     return () => {};
   }, []);
 
-  const fetchUsers = async (param={}) => {
+  const fetchUsers = async (param={}, page=1) => {
+    param = {
+      ...param,
+      limit: paginationLimit,
+      page
+    }
     await axios.get('/user/list', { params: param }).then((response) => {
       const data = response.data.data;
       data.forEach(user => {
         user.profile = imageURL + user.profile;
       });
       setUserList(data);
+      setPaginationData({
+        from: response.data.from,
+        last_page: response.data.last_page,
+        per_page: response.data.per_page
+      });
     })
   }
 
@@ -97,7 +112,8 @@ const UserPage = () => {
         handleDialog={handleDialog}
       />
       <EventPagination
-        metadata={userData.metadata}
+        metadata={paginationData}
+        fetchData={fetchUsers}
       />
       <EventDetailDialog
         show={showDialog}
