@@ -24,3 +24,10 @@
     transition: 0.3s ease-in-out;
     color: #fff;
 }
+.login-link {
+    color: #464646;
+    text-decoration: unset;
+}
+.login-link:hover {
+    color: #07b53b;
+}
