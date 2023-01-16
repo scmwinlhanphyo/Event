@@ -341,3 +341,4 @@ export const userDialogProperty = {
 }
 
 export const imageURL = "http://127.0.0.1:8000/";
+export const paginationLimit = 5;

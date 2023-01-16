@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux";
 import { FORGET_PASSWORD_SUCCESS } from "../../store/actions/types";
 import styles from './PasswordChangeForm.module.scss';
 import axios from '../../axios/index';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const PasswordChangeForm = () => {
+  const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
     new_password: '',
     comfirm_new_password: ''
@@ -79,11 +81,17 @@ const PasswordChangeForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setLoading(true);
+    setDisabledLoginBtn(true);
     axios.post(`/reset-password/${token}`, formData).then(response => {
+      setLoading(false);
+      setDisabledLoginBtn(false);
       if(response.status === 200) {
         history.push('/login');
       }
     }).catch(error => {
+      setLoading(false);
+      setDisabledLoginBtn(false);
       alert(error.response.data);
     });
     // if (formData.new_password === 'password' && formData.comfirm_new_password === formData.new_password) {
@@ -154,11 +162,13 @@ const PasswordChangeForm = () => {
 
   return (
     <Fragment>
-      <video autoPlay loop muted className={styles.videoBg}>
+      <video autoPlay loop muted className={loading ? styles.backdrop + ' shadow ' + styles.videoBg : styles.videoBg}>
         <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
       </video>
 
-      <div className={styles.container}>
+      {loading && <LoadingSpinner text="Resetting password..." />}
+
+      <div className={loading ? styles.container + ' shadow ' + styles.backdrop : styles.container }>
         <p className={styles.passwordChangeFormTtl}>Change Password</p>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicPassword">

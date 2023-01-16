@@ -4,8 +4,10 @@ import {Button, Form } from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import styles from './ForgetPassword.module.scss';
 import axios from "../../axios/index";
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const ForgetPassword = () => {
+  const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
     email: '',
   });
@@ -65,13 +67,18 @@ const ForgetPassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setDisabledLoginBtn(true);
+    setLoading(true);
     if (formData) {
-      sessionStorage.setItem("email", formData.email);
       axios.post('/forget-password', formData).then(response => {
+        setDisabledLoginBtn(false);
+        setLoading(false);
         if(response.status === 200) {
           alert('Reset Password Link was successfully sent to your email.');
         }
       }).catch(error => {
+        setDisabledLoginBtn(false);
+        setLoading(false);
         if(error.response.status === 422) {
           alert('Email does not exist! Please try again.');
           setFormData({email : ''});
@@ -122,11 +129,13 @@ const ForgetPassword = () => {
 
   return (
     <Fragment>
-      <video autoPlay loop muted className={styles.videoBg}>
+      <video autoPlay loop muted className={loading ? styles.backdrop + ' shadow ' + styles.videoBg : styles.videoBg}>
         <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
       </video>
 
-      <div className={styles.container}>
+      {loading && <LoadingSpinner text="Sending email... " />}
+
+      <div className={loading ? styles.container + ' shadow ' + styles.backdrop : styles.container }>
         <p className={styles.forgetPasswordTtl}>Forgot your password?</p>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">

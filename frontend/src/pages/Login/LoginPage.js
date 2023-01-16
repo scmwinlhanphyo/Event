@@ -4,8 +4,11 @@ import {Button, Form} from 'react-bootstrap';
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../store/actions/types";
 import styles from './LoginPage.module.scss';
+import axios from '../../axios/index';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 
 const LoginPage = () => {
+  const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState({
     email: '',
     password: ''
@@ -76,32 +79,70 @@ const LoginPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
-      const token = 12345;
+    setLoading(true);
+    setDisabledLoginBtn(true);
+    axios.post('/login', formData).then((response) => {
+      console.log(response);
+      setLoading(false);
+      setDisabledLoginBtn(false);
+      if(response.status === 200) {
+        const { data } = response;
+        const token = data.token;
+        const { user } = data;
+        console.log('token',response);
+        /** store logged in user's info to local storage */
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            accessToken: token,
+            ...user
+          })
+        );
+        /** store logged in user's info to App State */
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: {
+            user: {
+              accessToken: token,
+              ...formData
+            },
+          }
+        });
+        history.push('/admin/events');
+      }
+    }).catch((error) => {
+      setLoading(false);
+      setDisabledLoginBtn(false);
+      alert("Email or Password name is incorrect.");
+      console.log(error);
+    });
 
-      /** store logged in user's info to local storage */
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          accessToken: token,
-          ...formData
-        })
-      );
+    // if (formData.email === 'admin@gmail.com' && formData.password === 'password') {
+    //   const token = 12345;
 
-      /** store logged in user's info to App State */
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          user: {
-            accessToken: '12345',
-            ...formData
-          },
-        }
-      });
-      history.push('/admin/events');
-    } else {
-      alert('username or password is wrong');
-    }
+    //   /** store logged in user's info to local storage */
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       accessToken: token,
+    //       ...formData
+    //     })
+    //   );
+
+    //   /** store logged in user's info to App State */
+    //   dispatch({
+    //     type: LOGIN_SUCCESS,
+    //     payload: {
+    //       user: {
+    //         accessToken: '12345',
+    //         ...formData
+    //       },
+    //     }
+    //   });
+    //   history.push('/admin/events');
+    // } else {
+    //   alert('username or password is wrong');
+    // }
 
     // axios.post("auth/login", formData)
     // .then((res) => {
@@ -144,11 +185,13 @@ const LoginPage = () => {
 
   return (
     <Fragment>
-      <video autoPlay loop muted className={styles.videoBg}>
+      <video autoPlay loop muted className={loading ? styles.backdrop + ' shadow ' + styles.videoBg : styles.videoBg}>
         <source src='../../../login/phone_using.mp4' type='video/mp4'></source>
       </video>
 
-      <div className={styles.container}>
+      {loading && <LoadingSpinner text="Logging in..." />}
+
+      <div className={loading ? styles.container + ' shadow ' + styles.backdrop : styles.container }>
         <p className={styles.loginTtl}>Event Login Form</p>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -164,7 +207,7 @@ const LoginPage = () => {
               isValid={!errorForm.email}
               isInvalid={errorForm.email}
             />
-             {errorForm.email ? (
+            {errorForm.email ? (
                 <span className='text-danger mt-4'>{errorForm.email}</span>) : ''}
           </Form.Group>
 
@@ -181,7 +224,7 @@ const LoginPage = () => {
               isValid={!errorForm.password}
               isInvalid={errorForm.password}
             />
-             {errorForm.password ? (
+            {errorForm.password ? (
             <span className='text-danger mt-4'>{errorForm.password}</span>) : ''}
           </Form.Group>
           <div className="mb-3 d-flex justify-content-end">
@@ -194,6 +237,7 @@ const LoginPage = () => {
           </div>
         </Form>
       </div>
+
     </Fragment>
   )
 }

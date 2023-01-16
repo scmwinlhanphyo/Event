@@ -48,7 +48,7 @@ class UserDao implements UserDaoInterface
           'LIKE',
           '%' . request()->query('email') . '%']);
       }
-      return User::where($condition)->paginate(config('constant.pagination_count'));
+      return User::where($condition)->paginate(request()->query('limit'));
     });
   }
 

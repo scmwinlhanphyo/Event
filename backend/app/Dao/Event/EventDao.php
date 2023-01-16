@@ -5,6 +5,7 @@ namespace App\Dao\Event;
 use Illuminate\Support\Facades\DB;
 use App\Models\Event;
 use App\Contracts\Dao\Event\EventDaoInterface;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Data accessing object for event
@@ -22,23 +23,23 @@ class EventDao implements EventDaoInterface
       $condition = [];
       if (request()->query('name')) {
         array_push($condition, [
-          "name",
+          "events.event_name",
           'LIKE',
           '%' . request()->query('name') . '%']);
       }
       if (request()->query('from_date')) {
         array_push($condition, [
-          "from_date",
+          "events.from_date",
           '=',
           request()->query('from_date')]);
       }
       if (request()->query('to_date')) {
         array_push($condition, [
-          "to_date",
+          "events.to_date",
           '=',
           request()->query('to_date')]);
       }
-      return Event::select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address as user_address', 'users.phone', 'users.profile')->leftJoin('users', 'users.id', '=', 'events.approved_by_user_id')->paginate(config('constant.pagination_count'));
+      return Event::select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address as user_address', 'users.phone', 'users.profile')->where($condition)->leftJoin('users', 'users.id', '=', 'events.approved_by_user_id')->paginate(request()->query('limit'));
     });
   }
 
