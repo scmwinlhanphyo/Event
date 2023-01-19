@@ -68,9 +68,6 @@ const UserPage = () => {
     }
     await axios.get('/user/list', { params: param }).then((response) => {
       const data = response.data.data;
-      data.forEach(user => {
-        user.profile = imageURL + user.profile;
-      });
       setUserList(data);
       setPaginationData({
         from: response.data.from,

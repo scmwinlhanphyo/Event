@@ -6,7 +6,7 @@ export const eventData = {
       description: 'It is IT developer knowledge sharing',
       status: 'new',
       approvedBy: null,
-      img: '/events/img1.jpg',
+      image: '/events/img1.jpg',
       fromDate: new Date(),
       toDate: new Date(),
       fromTime: '9:00 AM',
@@ -21,7 +21,7 @@ export const eventData = {
       description: 'It is the shopping festival',
       status: 'approved',
       approvedBy: 'John',
-      img: '/events/img2.jpg',
+      image: '/events/img2.jpg',
       fromDate: new Date(),
       toDate: new Date(),
       fromTime: '9:00 AM',
@@ -36,7 +36,7 @@ export const eventData = {
       description: 'MLBB, Pubg, Dota match',
       status: 'new',
       approvedBy: null,
-      img: '/events/img3.jpg',
+      image: '/events/img3.jpg',
       fromDate: new Date(),
       toDate: new Date(),
       fromTime: '9:00 AM',
@@ -51,7 +51,7 @@ export const eventData = {
       description: 'Music Festival',
       status: 'new',
       approvedBy: null,
-      img: '/events/img4.jpg',
+      image: '/events/img4.jpg',
       fromDate: new Date(),
       toDate: new Date(),
       fromTime: '9:00 AM',
@@ -66,7 +66,7 @@ export const eventData = {
       description: 'Show various food in one place',
       status: 'new',
       approvedBy: null,
-      img: '/events/img5.jpg',
+      image: '/events/img5.jpg',
       fromDate: new Date(),
       toDate: new Date().setDate(new Date().getDate()+2),
       fromTime: '9:00 AM',
@@ -88,7 +88,7 @@ export const eventTableProperty = {
   headers: ['No', 'Image', 'Event Name', 'Date', 'Time', 'Status', 'Approved by', 'Created At', 'Updated At', 'Actions'],
   property: [
     {
-      key: 'img',
+      key: 'image',
       type: 'image'
     },
     {

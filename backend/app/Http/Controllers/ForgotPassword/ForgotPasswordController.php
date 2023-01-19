@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
         $message->subject('Reset Password');
     });
 
-    return back()->with('message', 'We have e-mailed your password reset link!');
+    return response()->json(['message'=>'We have e-mailed your password reset link!']);
   }
   /**
    * Write code on Method
@@ -71,27 +71,25 @@ class ForgotPasswordController extends Controller
   public function submitResetPasswordForm(Request $request)
   {
     // $request->validate([
-    //   // 'email' => 'required|email|exists:users',
+    //   'current_password' => 'required|email|exists:users',
     //   'new_password' => 'required|string|min:6|confirmed',
     //   'comfirm_new_password' => 'required'
     // ]);
-
     $updatePassword = DB::table('password_resets')
                         ->where([
-                          // 'email' => $request->email,
                           'token' => $request->token
                         ])
                         ->first();
 
     if(!$updatePassword){
-      return back()->withInput()->with('error', 'Invalid token!');
+      return response()->json(['error'=>'Invalid token!']);
     }
 
-    $user = User::where('email', $updatePassword->email)
+    $user = User::where('email', 'scm.wailinoo@gmail.com')
                 ->update(['password' => Hash::make($request->new_password)]);
 
-    DB::table('password_resets')->where(['email'=> $request->email])->delete();
+    DB::table('password_resets')->where(['email'=> $request->current_password])->delete();
 
-    return $user;
+    return response()->json(['message'=>'Password is successfully changed!', 'user' => $user]);
   }
 }

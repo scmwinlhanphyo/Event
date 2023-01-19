@@ -50,7 +50,7 @@ class EventDao implements EventDaoInterface
   public function getTopEventList()
   {
     return DB::transaction(function () {
-      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.to_date', '>=', date('Y-m-d'))->paginate(config('constant.pagination_count'));
+      return Event::join('users', 'users.id', '=', 'events.approved_by_user_id')->select('events.*', 'users.name as username', 'users.email', 'users.role', 'users.dob', 'users.address', 'users.phone', 'users.profile')->where('events.to_date', '>', date('Y-m-d'))->paginate(config('constant.pagination_count'));
     });
   }
 

@@ -22,7 +22,7 @@ const ListTable = ({ tableProperty, list, btnFunction, handleDialog }) => {
               {tableProperty.property.map((dist, i) => (
                 <td key={data.id + 'table-prop' + i}>
                   {
-                    (dist.type === 'image') ? <img alt='image' className={styles.eventImg} src={data[dist.key]} />
+                    (dist.type === 'image') ? <img alt='image' className={styles.eventImg} src={'http://localhost:8000/' +data[dist.key]} />
                       :
                       (dist.type === 'date') ? (dist.key === 'from_date') ? moment(data[dist.key]).format('DD/MM/YYYY') + '~' + moment(data.to_date).format('DD/MM/YYYY') : data?.[dist.key] ?
                        moment(data[dist.key]).format('DD MMM YYYY') : ''
