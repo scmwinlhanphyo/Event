@@ -13,9 +13,9 @@ const EventDetailDialog = ({show, handleClose, data, dialogProperty}) => {
       <Modal.Body>
         <Container>
           <Row className={styles.eventImgRow}>
-            {data?.img ? <img className={styles.eventImg} src={data?.img} />
+            {data?.image ? <img className={styles.eventImg} src={'http://localhost:8000/' + data?.image} />
             :
-            <img className={styles.eventImg} src={data?.profile} />}
+            <img className={styles.eventImg} src={'http://localhost:8000/' + data?.profile} />}
           </Row>
           {dialogProperty.property.map((dist, index) => (
             <Row className={styles.eventRow} key={index}>

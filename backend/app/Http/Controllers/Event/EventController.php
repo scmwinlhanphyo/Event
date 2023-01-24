@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Event;
 
-use App\Http\Controllers\Controller;
 use App\Contracts\Services\Event\EventServiceInterface;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\EventRequest;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Response;
 use Validator;
@@ -78,16 +80,24 @@ class EventController extends Controller
    * @param Request $request
    * @return void
    */
-  public function createEvent(Request $request)
+  public function createEvent(EventRequest $request)
   {
-    $validator = $this->validateEvent($request);
-    if ($validator->fails()) {
-      return response()->json(400);
-    } else {
-      $eventInfo = $this->eventInfo($request);
-      $event = $this->eventInterface->createEvent($eventInfo);
-      return Response::json($event, 200);
-    }
+    info($request);
+    $imageName = time() . '.' . $request->image->extension();
+    $request->image->move(storage_path('app/public/events'), $imageName);
+    $event = Event::create([
+      'event_name' => $request->event_name,
+      'description' => $request->description,
+      'from_date' => $request->from_date,
+      'to_date' => $request->to_date,
+      'from_time' => $request->from_time,
+      'to_time' => $request->to_time,
+      'status' => $request->status,
+      'image' => $request->image,
+      'address' => $request->address,
+      'approved_by_user_id' => $request->approved_by_user_id ?? 1,
+    ]);
+    return response()->json(['message' => 'New Event is successfully created!', 'event' => $event]);
   }
 
   /**

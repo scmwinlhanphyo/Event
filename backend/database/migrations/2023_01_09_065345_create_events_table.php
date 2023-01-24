@@ -25,8 +25,7 @@ class CreateEventsTable extends Migration
             $table->string('image');
             $table->string('address');
             $table->string('approved_by_user_id')->references('id')->on('users');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamps();
             $table->softDeletes();
         });
     }

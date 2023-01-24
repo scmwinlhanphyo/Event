@@ -30,6 +30,7 @@ const EventListPage = () => {
   const changeStatus = (id, status) => {
     let preEventList = eventList;
     const index = preEventList.findIndex(event => event.id === id);
+    const event_list_data = preEventList.filter(event =>event.id === id)[0];
     preEventList[index].status =  status;
     preEventList[index].approved_by_user_id = status === 'approved' ? 1 : null;
     axios.post('/event/update/' + id, preEventList[index]).then((response) => {
@@ -37,8 +38,32 @@ const EventListPage = () => {
         console.log('Event data was successfully updated!');
       }
     })
-
     searchEvent();
+    if(status == 'approved'){
+      sentLineMessage(event_list_data);
+    }
+  }
+
+  const sentLineMessage = (event_list_data) =>{
+    let formData = new FormData();
+    formData.append('id', event_list_data.id);
+    formData.append('address', event_list_data.address);
+    formData.append('approved_by_user_id', event_list_data.approved_by_user_id);
+    formData.append('description', event_list_data.description);
+    formData.append('dob', event_list_data.dob);
+    formData.append('event_name', event_list_data.event_name);
+    formData.append('from_date', event_list_data.from_date);
+    formData.append('from_time', event_list_data.from_time);
+    formData.append('image', event_list_data.image);
+    formData.append('phone', event_list_data.phone);
+    formData.append('profile', event_list_data.profile);
+    formData.append('user_address', event_list_data.user_address);
+    formData.append('username', event_list_data.username);
+    axios.post('/line/webhook/message',formData).then((response) => {
+      console.log('line message send successfully');
+    }).catch((error) => {
+      console.log(`error message ${error}`);
+    });
   }
 
   const searchEvent = () => {
