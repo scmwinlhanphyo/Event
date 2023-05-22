@@ -4,10 +4,17 @@ import { Link, useHistory } from 'react-router-dom';
 import { imageURL } from '../../utils/constants/constant';
 import styles from './Header.module.scss';
 import axios from '../../axios/index';
+import { Button } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const Header = () => {
+  const [value, setValue] = React.useState(0);
   const history = useHistory();
   const storageData = JSON.parse(localStorage.getItem("user"));
+
   const currentUser = {
     'id' : storageData['id'],
     'name' : storageData['name'],
@@ -19,11 +26,20 @@ const Header = () => {
     axios.post("/logout", storageData).then(response => {
       console.log(response);
     })
-  }
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const indicatorStyle = {
+    lineHeight: '5rem', // Adjust the line height as needed
+    color: 'black'
+  };
 
   return (
     <>
-      <Navbar className={styles.navBar+' shadow-sm'} variant="dark">
+      {/* <Navbar className={styles.navBar+' shadow-sm'} variant="dark">
         <Container>
           <Navbar.Brand as={Link} to="/admin/events">Event</Navbar.Brand>
           <Navbar.Collapse>
@@ -44,7 +60,23 @@ const Header = () => {
           </Navbar.Collapse>
           
         </Container>
-      </Navbar>
+      </Navbar> */}
+      <Box sx={{ width: '100%', height: '300', bgcolor: '#1FC46E', padding: '0 100px' }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="#000"
+            sx={{
+              color: '#fff',
+              indicatorColor: '#000',
+              lineHeight: '5rem',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <Tab label="Event"></Tab>
+            <Tab label="User"></Tab>
+          </Tabs>
+        </Box>
     </>
   )
 }
